@@ -62,7 +62,7 @@ type ResourceManager struct {
 	Alias string `protobuf:"bytes,3,opt,name=alias,proto3" json:"alias,omitempty"`
 	// Is a human-readable name of the resource manager.
 	CreateTime *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`
-	// Is a human-readable name of the resource manager.
+	// Is a human-readable na/me of the resource manager.
 	DisplayName string `protobuf:"bytes,5,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
 	// Is a token audience name for this resource manager.
 	// The audience name is used by the token issuer to identify the resource manager.
@@ -181,6 +181,8 @@ type ResourcePermission struct {
 	// The resource permission identifier and resource name.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Server-generated unique identifier for the scope.
+	// It could be used as an alias for the resource permission identifier.
+	// I.e.:  projects/{project}/resourceManagers/{resourceManager}/resourcePermissions/{uid}
 	Uid string `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`
 	// The authorization scope string that is used in the OAuth 2.0 access and refresh tokens.
 	// It is used as OAuth 2.0 scope parameter.
