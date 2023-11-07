@@ -16,9 +16,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: blocky/authz/public/v1alpha/keys.proto
+// source: blocky/authz/v1alpha/keys.proto
 
-package authzpublicv1alpha
+package authzv1alpha
 
 import (
 	context "context"
@@ -33,7 +33,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	KeysService_GetPublicKeys_FullMethodName = "/blocky.authz.public.v1alpha.KeysService/GetPublicKeys"
+	KeysService_GetPublicKeys_FullMethodName = "/blocky.authz.v1alpha.KeysService/GetPublicKeys"
 )
 
 // KeysServiceClient is the client API for KeysService service.
@@ -116,7 +116,7 @@ func _KeysService_GetPublicKeys_Handler(srv interface{}, ctx context.Context, de
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var KeysService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "blocky.authz.public.v1alpha.KeysService",
+	ServiceName: "blocky.authz.v1alpha.KeysService",
 	HandlerType: (*KeysServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -125,5 +125,5 @@ var KeysService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "blocky/authz/public/v1alpha/keys.proto",
+	Metadata: "blocky/authz/v1alpha/keys.proto",
 }

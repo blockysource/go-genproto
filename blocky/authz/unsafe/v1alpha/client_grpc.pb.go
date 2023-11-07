@@ -16,9 +16,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: blocky/authz/e2e/v1alpha/client.proto
+// source: blocky/authz/unsafe/v1alpha/client.proto
 
-package authze2ev1alpha
+package authzunsafev1alpha
 
 import (
 	context "context"
@@ -33,7 +33,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ClientService_ShowClientCredentials_FullMethodName = "/blocky.authz.e2e.v1alpha.ClientService/ShowClientCredentials"
+	ClientService_ShowClientCredentials_FullMethodName = "/blocky.authz.unsafe.v1alpha.ClientService/ShowClientCredentials"
 )
 
 // ClientServiceClient is the client API for ClientService service.
@@ -41,7 +41,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ClientServiceClient interface {
 	// ShowClientCredentials shows the client credentials for a client.
-	// It may be used by the e2e client to obtain the client credentials.
+	// It may be used by the unsafe client to obtain the client credentials.
 	ShowClientCredentials(ctx context.Context, in *ShowClientCredentialsRequest, opts ...grpc.CallOption) (*ClientCredentials, error)
 }
 
@@ -67,7 +67,7 @@ func (c *clientServiceClient) ShowClientCredentials(ctx context.Context, in *Sho
 // for forward compatibility
 type ClientServiceServer interface {
 	// ShowClientCredentials shows the client credentials for a client.
-	// It may be used by the e2e client to obtain the client credentials.
+	// It may be used by the unsafe client to obtain the client credentials.
 	ShowClientCredentials(context.Context, *ShowClientCredentialsRequest) (*ClientCredentials, error)
 	mustEmbedUnimplementedClientServiceServer()
 }
@@ -114,7 +114,7 @@ func _ClientService_ShowClientCredentials_Handler(srv interface{}, ctx context.C
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ClientService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "blocky.authz.e2e.v1alpha.ClientService",
+	ServiceName: "blocky.authz.unsafe.v1alpha.ClientService",
 	HandlerType: (*ClientServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -123,5 +123,5 @@ var ClientService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "blocky/authz/e2e/v1alpha/client.proto",
+	Metadata: "blocky/authz/unsafe/v1alpha/client.proto",
 }

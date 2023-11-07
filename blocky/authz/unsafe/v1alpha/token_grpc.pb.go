@@ -16,9 +16,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: blocky/authz/e2e/v1alpha/token.proto
+// source: blocky/authz/unsafe/v1alpha/token.proto
 
-package authze2ev1alpha
+package authzunsafev1alpha
 
 import (
 	context "context"
@@ -34,16 +34,19 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TokensService_IssueToken_FullMethodName         = "/blocky.authz.e2e.v1alpha.TokensService/IssueToken"
-	TokensService_RefreshToken_FullMethodName       = "/blocky.authz.e2e.v1alpha.TokensService/RefreshToken"
-	TokensService_RevokeRefreshToken_FullMethodName = "/blocky.authz.e2e.v1alpha.TokensService/RevokeRefreshToken"
-	TokensService_IntrospectToken_FullMethodName    = "/blocky.authz.e2e.v1alpha.TokensService/IntrospectToken"
+	TokensService_IssueIDToken_FullMethodName       = "/blocky.authz.unsafe.v1alpha.TokensService/IssueIDToken"
+	TokensService_IssueToken_FullMethodName         = "/blocky.authz.unsafe.v1alpha.TokensService/IssueToken"
+	TokensService_RefreshToken_FullMethodName       = "/blocky.authz.unsafe.v1alpha.TokensService/RefreshToken"
+	TokensService_RevokeRefreshToken_FullMethodName = "/blocky.authz.unsafe.v1alpha.TokensService/RevokeRefreshToken"
+	TokensService_IntrospectToken_FullMethodName    = "/blocky.authz.unsafe.v1alpha.TokensService/IntrospectToken"
 )
 
 // TokensServiceClient is the client API for TokensService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TokensServiceClient interface {
+	// IssueIDToken issues a new ID token for the input subject.
+	IssueIDToken(ctx context.Context, in *IssueIDTokenRequest, opts ...grpc.CallOption) (*IssueIDTokenResponse, error)
 	// Issues a new authorization token for the input subject.
 	IssueToken(ctx context.Context, in *IssueTokenRequest, opts ...grpc.CallOption) (*IssueTokenResponse, error)
 	// Creates a new access, refresh token pair on top of the input refresh token.
@@ -65,6 +68,15 @@ type tokensServiceClient struct {
 
 func NewTokensServiceClient(cc grpc.ClientConnInterface) TokensServiceClient {
 	return &tokensServiceClient{cc}
+}
+
+func (c *tokensServiceClient) IssueIDToken(ctx context.Context, in *IssueIDTokenRequest, opts ...grpc.CallOption) (*IssueIDTokenResponse, error) {
+	out := new(IssueIDTokenResponse)
+	err := c.cc.Invoke(ctx, TokensService_IssueIDToken_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *tokensServiceClient) IssueToken(ctx context.Context, in *IssueTokenRequest, opts ...grpc.CallOption) (*IssueTokenResponse, error) {
@@ -107,6 +119,8 @@ func (c *tokensServiceClient) IntrospectToken(ctx context.Context, in *Introspec
 // All implementations must embed UnimplementedTokensServiceServer
 // for forward compatibility
 type TokensServiceServer interface {
+	// IssueIDToken issues a new ID token for the input subject.
+	IssueIDToken(context.Context, *IssueIDTokenRequest) (*IssueIDTokenResponse, error)
 	// Issues a new authorization token for the input subject.
 	IssueToken(context.Context, *IssueTokenRequest) (*IssueTokenResponse, error)
 	// Creates a new access, refresh token pair on top of the input refresh token.
@@ -127,6 +141,9 @@ type TokensServiceServer interface {
 type UnimplementedTokensServiceServer struct {
 }
 
+func (UnimplementedTokensServiceServer) IssueIDToken(context.Context, *IssueIDTokenRequest) (*IssueIDTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IssueIDToken not implemented")
+}
 func (UnimplementedTokensServiceServer) IssueToken(context.Context, *IssueTokenRequest) (*IssueTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IssueToken not implemented")
 }
@@ -150,6 +167,24 @@ type UnsafeTokensServiceServer interface {
 
 func RegisterTokensServiceServer(s grpc.ServiceRegistrar, srv TokensServiceServer) {
 	s.RegisterService(&TokensService_ServiceDesc, srv)
+}
+
+func _TokensService_IssueIDToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IssueIDTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TokensServiceServer).IssueIDToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TokensService_IssueIDToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TokensServiceServer).IssueIDToken(ctx, req.(*IssueIDTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _TokensService_IssueToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -228,9 +263,13 @@ func _TokensService_IntrospectToken_Handler(srv interface{}, ctx context.Context
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var TokensService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "blocky.authz.e2e.v1alpha.TokensService",
+	ServiceName: "blocky.authz.unsafe.v1alpha.TokensService",
 	HandlerType: (*TokensServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "IssueIDToken",
+			Handler:    _TokensService_IssueIDToken_Handler,
+		},
 		{
 			MethodName: "IssueToken",
 			Handler:    _TokensService_IssueToken_Handler,
@@ -249,5 +288,5 @@ var TokensService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "blocky/authz/e2e/v1alpha/token.proto",
+	Metadata: "blocky/authz/unsafe/v1alpha/token.proto",
 }
