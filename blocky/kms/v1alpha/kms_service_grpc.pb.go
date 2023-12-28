@@ -22,6 +22,7 @@ package kmspb
 
 import (
 	context "context"
+	cryptopb "github.com/blockysource/go-genproto/blocky/kms/cryptopb"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -95,7 +96,7 @@ type KmsServiceClient interface {
 	// Delete key ring.
 	DeleteKeyRing(ctx context.Context, in *DeleteKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error)
 	// SignContent signs the given data with the given key.
-	SignContent(ctx context.Context, in *SignContentRequest, opts ...grpc.CallOption) (*SignContentResponse, error)
+	SignContent(ctx context.Context, in *SignContentRequest, opts ...grpc.CallOption) (*cryptopb.SignedContent, error)
 	// Verify signed content verifies the given signature with the given key.
 	VerifySignedContent(ctx context.Context, in *VerifySignedContentRequest, opts ...grpc.CallOption) (*VerifySignedContentResponse, error)
 	// SignBlob creates a raw signature for the given input blob.
@@ -255,8 +256,8 @@ func (c *kmsServiceClient) DeleteKeyRing(ctx context.Context, in *DeleteKeyRingR
 	return out, nil
 }
 
-func (c *kmsServiceClient) SignContent(ctx context.Context, in *SignContentRequest, opts ...grpc.CallOption) (*SignContentResponse, error) {
-	out := new(SignContentResponse)
+func (c *kmsServiceClient) SignContent(ctx context.Context, in *SignContentRequest, opts ...grpc.CallOption) (*cryptopb.SignedContent, error) {
+	out := new(cryptopb.SignedContent)
 	err := c.cc.Invoke(ctx, KmsService_SignContent_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -364,7 +365,7 @@ type KmsServiceServer interface {
 	// Delete key ring.
 	DeleteKeyRing(context.Context, *DeleteKeyRingRequest) (*KeyRing, error)
 	// SignContent signs the given data with the given key.
-	SignContent(context.Context, *SignContentRequest) (*SignContentResponse, error)
+	SignContent(context.Context, *SignContentRequest) (*cryptopb.SignedContent, error)
 	// Verify signed content verifies the given signature with the given key.
 	VerifySignedContent(context.Context, *VerifySignedContentRequest) (*VerifySignedContentResponse, error)
 	// SignBlob creates a raw signature for the given input blob.
@@ -431,7 +432,7 @@ func (UnimplementedKmsServiceServer) UpdateKeyRing(context.Context, *UpdateKeyRi
 func (UnimplementedKmsServiceServer) DeleteKeyRing(context.Context, *DeleteKeyRingRequest) (*KeyRing, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteKeyRing not implemented")
 }
-func (UnimplementedKmsServiceServer) SignContent(context.Context, *SignContentRequest) (*SignContentResponse, error) {
+func (UnimplementedKmsServiceServer) SignContent(context.Context, *SignContentRequest) (*cryptopb.SignedContent, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignContent not implemented")
 }
 func (UnimplementedKmsServiceServer) VerifySignedContent(context.Context, *VerifySignedContentRequest) (*VerifySignedContentResponse, error) {
