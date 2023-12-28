@@ -33,20 +33,67 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	KmsService_SignContent_FullMethodName         = "/blocky.kms.v1alpha.KmsService/SignContent"
-	KmsService_VerifySignedContent_FullMethodName = "/blocky.kms.v1alpha.KmsService/VerifySignedContent"
-	KmsService_SignBlob_FullMethodName            = "/blocky.kms.v1alpha.KmsService/SignBlob"
-	KmsService_VerifyBlob_FullMethodName          = "/blocky.kms.v1alpha.KmsService/VerifyBlob"
-	KmsService_EncryptContent_FullMethodName      = "/blocky.kms.v1alpha.KmsService/EncryptContent"
-	KmsService_DecryptContent_FullMethodName      = "/blocky.kms.v1alpha.KmsService/DecryptContent"
-	KmsService_EncryptBlob_FullMethodName         = "/blocky.kms.v1alpha.KmsService/EncryptBlob"
-	KmsService_DecryptBlob_FullMethodName         = "/blocky.kms.v1alpha.KmsService/DecryptBlob"
+	KmsService_CreateKey_FullMethodName               = "/blocky.kms.v1alpha.KmsService/CreateKey"
+	KmsService_ListKeys_FullMethodName                = "/blocky.kms.v1alpha.KmsService/ListKeys"
+	KmsService_GetKey_FullMethodName                  = "/blocky.kms.v1alpha.KmsService/GetKey"
+	KmsService_UpdateKey_FullMethodName               = "/blocky.kms.v1alpha.KmsService/UpdateKey"
+	KmsService_DeleteKey_FullMethodName               = "/blocky.kms.v1alpha.KmsService/DeleteKey"
+	KmsService_RotateKey_FullMethodName               = "/blocky.kms.v1alpha.KmsService/RotateKey"
+	KmsService_GetKeyMaterial_FullMethodName          = "/blocky.kms.v1alpha.KmsService/GetKeyMaterial"
+	KmsService_ListKeyMaterials_FullMethodName        = "/blocky.kms.v1alpha.KmsService/ListKeyMaterials"
+	KmsService_GetKeyMaterialCryptoKey_FullMethodName = "/blocky.kms.v1alpha.KmsService/GetKeyMaterialCryptoKey"
+	KmsService_CreateKeyRing_FullMethodName           = "/blocky.kms.v1alpha.KmsService/CreateKeyRing"
+	KmsService_ListKeyRings_FullMethodName            = "/blocky.kms.v1alpha.KmsService/ListKeyRings"
+	KmsService_GetKeyRing_FullMethodName              = "/blocky.kms.v1alpha.KmsService/GetKeyRing"
+	KmsService_ListKeyRingPublicKeys_FullMethodName   = "/blocky.kms.v1alpha.KmsService/ListKeyRingPublicKeys"
+	KmsService_UpdateKeyRing_FullMethodName           = "/blocky.kms.v1alpha.KmsService/UpdateKeyRing"
+	KmsService_DeleteKeyRing_FullMethodName           = "/blocky.kms.v1alpha.KmsService/DeleteKeyRing"
+	KmsService_SignContent_FullMethodName             = "/blocky.kms.v1alpha.KmsService/SignContent"
+	KmsService_VerifySignedContent_FullMethodName     = "/blocky.kms.v1alpha.KmsService/VerifySignedContent"
+	KmsService_SignBlob_FullMethodName                = "/blocky.kms.v1alpha.KmsService/SignBlob"
+	KmsService_VerifyBlob_FullMethodName              = "/blocky.kms.v1alpha.KmsService/VerifyBlob"
+	KmsService_EncryptContent_FullMethodName          = "/blocky.kms.v1alpha.KmsService/EncryptContent"
+	KmsService_DecryptContent_FullMethodName          = "/blocky.kms.v1alpha.KmsService/DecryptContent"
+	KmsService_EncryptBlob_FullMethodName             = "/blocky.kms.v1alpha.KmsService/EncryptBlob"
+	KmsService_DecryptBlob_FullMethodName             = "/blocky.kms.v1alpha.KmsService/DecryptBlob"
 )
 
 // KmsServiceClient is the client API for KmsService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type KmsServiceClient interface {
+	// CreateKey creates a new cryptographic key.
+	// New key is neither active nor used in a set.
+	CreateKey(ctx context.Context, in *CreateKeyRequest, opts ...grpc.CallOption) (*Key, error)
+	// Lists the keys for a given project.
+	ListKeys(ctx context.Context, in *ListKeysRequest, opts ...grpc.CallOption) (*ListKeysResponse, error)
+	// Get a key by its resource name.
+	GetKey(ctx context.Context, in *GetKeyRequest, opts ...grpc.CallOption) (*Key, error)
+	// UpdateKey updates the specified cryptographic key.
+	UpdateKey(ctx context.Context, in *UpdateKeyRequest, opts ...grpc.CallOption) (*Key, error)
+	// DeleteKey deletes the specified cryptographic key.
+	// If the key is protected it will result in an error of type PERMISSION_DENIED.
+	DeleteKey(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*Key, error)
+	// Creates a new key material and rotates the key.
+	RotateKey(ctx context.Context, in *RotateKeyRequest, opts ...grpc.CallOption) (*Key, error)
+	// GetKeyMaterial returns the specified key material.
+	GetKeyMaterial(ctx context.Context, in *GetKeyMaterialRequest, opts ...grpc.CallOption) (*KeyMaterial, error)
+	// ListKeyMaterials lists cryptographic keys that matches given request.
+	ListKeyMaterials(ctx context.Context, in *ListKeyMaterialsRequest, opts ...grpc.CallOption) (*ListKeyMaterialsResponse, error)
+	// GetKeyMaterialCryptoKey returns the specified key material.
+	GetKeyMaterialCryptoKey(ctx context.Context, in *GetKeyMaterialRequest, opts ...grpc.CallOption) (*KeyMaterialContent, error)
+	// Create a new key ring.
+	CreateKeyRing(ctx context.Context, in *CreateKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error)
+	// List key rings.
+	ListKeyRings(ctx context.Context, in *ListKeyRingsRequest, opts ...grpc.CallOption) (*ListKeyRingsResponse, error)
+	// Get key ring.
+	GetKeyRing(ctx context.Context, in *GetKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error)
+	// ListKeyRingPublicKeys lists the asymmetric public keys for a given key rings key materials.
+	ListKeyRingPublicKeys(ctx context.Context, in *ListKeyRingPublicKeysRequest, opts ...grpc.CallOption) (*ListKeyRingPublicKeysResponse, error)
+	// Update key ring.
+	UpdateKeyRing(ctx context.Context, in *UpdateKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error)
+	// Delete key ring.
+	DeleteKeyRing(ctx context.Context, in *DeleteKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error)
 	// SignContent signs the given data with the given key.
 	SignContent(ctx context.Context, in *SignContentRequest, opts ...grpc.CallOption) (*SignContentResponse, error)
 	// Verify signed content verifies the given signature with the given key.
@@ -71,6 +118,141 @@ type kmsServiceClient struct {
 
 func NewKmsServiceClient(cc grpc.ClientConnInterface) KmsServiceClient {
 	return &kmsServiceClient{cc}
+}
+
+func (c *kmsServiceClient) CreateKey(ctx context.Context, in *CreateKeyRequest, opts ...grpc.CallOption) (*Key, error) {
+	out := new(Key)
+	err := c.cc.Invoke(ctx, KmsService_CreateKey_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) ListKeys(ctx context.Context, in *ListKeysRequest, opts ...grpc.CallOption) (*ListKeysResponse, error) {
+	out := new(ListKeysResponse)
+	err := c.cc.Invoke(ctx, KmsService_ListKeys_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) GetKey(ctx context.Context, in *GetKeyRequest, opts ...grpc.CallOption) (*Key, error) {
+	out := new(Key)
+	err := c.cc.Invoke(ctx, KmsService_GetKey_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) UpdateKey(ctx context.Context, in *UpdateKeyRequest, opts ...grpc.CallOption) (*Key, error) {
+	out := new(Key)
+	err := c.cc.Invoke(ctx, KmsService_UpdateKey_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) DeleteKey(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*Key, error) {
+	out := new(Key)
+	err := c.cc.Invoke(ctx, KmsService_DeleteKey_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) RotateKey(ctx context.Context, in *RotateKeyRequest, opts ...grpc.CallOption) (*Key, error) {
+	out := new(Key)
+	err := c.cc.Invoke(ctx, KmsService_RotateKey_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) GetKeyMaterial(ctx context.Context, in *GetKeyMaterialRequest, opts ...grpc.CallOption) (*KeyMaterial, error) {
+	out := new(KeyMaterial)
+	err := c.cc.Invoke(ctx, KmsService_GetKeyMaterial_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) ListKeyMaterials(ctx context.Context, in *ListKeyMaterialsRequest, opts ...grpc.CallOption) (*ListKeyMaterialsResponse, error) {
+	out := new(ListKeyMaterialsResponse)
+	err := c.cc.Invoke(ctx, KmsService_ListKeyMaterials_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) GetKeyMaterialCryptoKey(ctx context.Context, in *GetKeyMaterialRequest, opts ...grpc.CallOption) (*KeyMaterialContent, error) {
+	out := new(KeyMaterialContent)
+	err := c.cc.Invoke(ctx, KmsService_GetKeyMaterialCryptoKey_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) CreateKeyRing(ctx context.Context, in *CreateKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error) {
+	out := new(KeyRing)
+	err := c.cc.Invoke(ctx, KmsService_CreateKeyRing_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) ListKeyRings(ctx context.Context, in *ListKeyRingsRequest, opts ...grpc.CallOption) (*ListKeyRingsResponse, error) {
+	out := new(ListKeyRingsResponse)
+	err := c.cc.Invoke(ctx, KmsService_ListKeyRings_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) GetKeyRing(ctx context.Context, in *GetKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error) {
+	out := new(KeyRing)
+	err := c.cc.Invoke(ctx, KmsService_GetKeyRing_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) ListKeyRingPublicKeys(ctx context.Context, in *ListKeyRingPublicKeysRequest, opts ...grpc.CallOption) (*ListKeyRingPublicKeysResponse, error) {
+	out := new(ListKeyRingPublicKeysResponse)
+	err := c.cc.Invoke(ctx, KmsService_ListKeyRingPublicKeys_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) UpdateKeyRing(ctx context.Context, in *UpdateKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error) {
+	out := new(KeyRing)
+	err := c.cc.Invoke(ctx, KmsService_UpdateKeyRing_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) DeleteKeyRing(ctx context.Context, in *DeleteKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error) {
+	out := new(KeyRing)
+	err := c.cc.Invoke(ctx, KmsService_DeleteKeyRing_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *kmsServiceClient) SignContent(ctx context.Context, in *SignContentRequest, opts ...grpc.CallOption) (*SignContentResponse, error) {
@@ -149,6 +331,38 @@ func (c *kmsServiceClient) DecryptBlob(ctx context.Context, in *DecryptBlobReque
 // All implementations must embed UnimplementedKmsServiceServer
 // for forward compatibility
 type KmsServiceServer interface {
+	// CreateKey creates a new cryptographic key.
+	// New key is neither active nor used in a set.
+	CreateKey(context.Context, *CreateKeyRequest) (*Key, error)
+	// Lists the keys for a given project.
+	ListKeys(context.Context, *ListKeysRequest) (*ListKeysResponse, error)
+	// Get a key by its resource name.
+	GetKey(context.Context, *GetKeyRequest) (*Key, error)
+	// UpdateKey updates the specified cryptographic key.
+	UpdateKey(context.Context, *UpdateKeyRequest) (*Key, error)
+	// DeleteKey deletes the specified cryptographic key.
+	// If the key is protected it will result in an error of type PERMISSION_DENIED.
+	DeleteKey(context.Context, *DeleteKeyRequest) (*Key, error)
+	// Creates a new key material and rotates the key.
+	RotateKey(context.Context, *RotateKeyRequest) (*Key, error)
+	// GetKeyMaterial returns the specified key material.
+	GetKeyMaterial(context.Context, *GetKeyMaterialRequest) (*KeyMaterial, error)
+	// ListKeyMaterials lists cryptographic keys that matches given request.
+	ListKeyMaterials(context.Context, *ListKeyMaterialsRequest) (*ListKeyMaterialsResponse, error)
+	// GetKeyMaterialCryptoKey returns the specified key material.
+	GetKeyMaterialCryptoKey(context.Context, *GetKeyMaterialRequest) (*KeyMaterialContent, error)
+	// Create a new key ring.
+	CreateKeyRing(context.Context, *CreateKeyRingRequest) (*KeyRing, error)
+	// List key rings.
+	ListKeyRings(context.Context, *ListKeyRingsRequest) (*ListKeyRingsResponse, error)
+	// Get key ring.
+	GetKeyRing(context.Context, *GetKeyRingRequest) (*KeyRing, error)
+	// ListKeyRingPublicKeys lists the asymmetric public keys for a given key rings key materials.
+	ListKeyRingPublicKeys(context.Context, *ListKeyRingPublicKeysRequest) (*ListKeyRingPublicKeysResponse, error)
+	// Update key ring.
+	UpdateKeyRing(context.Context, *UpdateKeyRingRequest) (*KeyRing, error)
+	// Delete key ring.
+	DeleteKeyRing(context.Context, *DeleteKeyRingRequest) (*KeyRing, error)
 	// SignContent signs the given data with the given key.
 	SignContent(context.Context, *SignContentRequest) (*SignContentResponse, error)
 	// Verify signed content verifies the given signature with the given key.
@@ -172,6 +386,51 @@ type KmsServiceServer interface {
 type UnimplementedKmsServiceServer struct {
 }
 
+func (UnimplementedKmsServiceServer) CreateKey(context.Context, *CreateKeyRequest) (*Key, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateKey not implemented")
+}
+func (UnimplementedKmsServiceServer) ListKeys(context.Context, *ListKeysRequest) (*ListKeysResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListKeys not implemented")
+}
+func (UnimplementedKmsServiceServer) GetKey(context.Context, *GetKeyRequest) (*Key, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKey not implemented")
+}
+func (UnimplementedKmsServiceServer) UpdateKey(context.Context, *UpdateKeyRequest) (*Key, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateKey not implemented")
+}
+func (UnimplementedKmsServiceServer) DeleteKey(context.Context, *DeleteKeyRequest) (*Key, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteKey not implemented")
+}
+func (UnimplementedKmsServiceServer) RotateKey(context.Context, *RotateKeyRequest) (*Key, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RotateKey not implemented")
+}
+func (UnimplementedKmsServiceServer) GetKeyMaterial(context.Context, *GetKeyMaterialRequest) (*KeyMaterial, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKeyMaterial not implemented")
+}
+func (UnimplementedKmsServiceServer) ListKeyMaterials(context.Context, *ListKeyMaterialsRequest) (*ListKeyMaterialsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListKeyMaterials not implemented")
+}
+func (UnimplementedKmsServiceServer) GetKeyMaterialCryptoKey(context.Context, *GetKeyMaterialRequest) (*KeyMaterialContent, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKeyMaterialCryptoKey not implemented")
+}
+func (UnimplementedKmsServiceServer) CreateKeyRing(context.Context, *CreateKeyRingRequest) (*KeyRing, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateKeyRing not implemented")
+}
+func (UnimplementedKmsServiceServer) ListKeyRings(context.Context, *ListKeyRingsRequest) (*ListKeyRingsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListKeyRings not implemented")
+}
+func (UnimplementedKmsServiceServer) GetKeyRing(context.Context, *GetKeyRingRequest) (*KeyRing, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKeyRing not implemented")
+}
+func (UnimplementedKmsServiceServer) ListKeyRingPublicKeys(context.Context, *ListKeyRingPublicKeysRequest) (*ListKeyRingPublicKeysResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListKeyRingPublicKeys not implemented")
+}
+func (UnimplementedKmsServiceServer) UpdateKeyRing(context.Context, *UpdateKeyRingRequest) (*KeyRing, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateKeyRing not implemented")
+}
+func (UnimplementedKmsServiceServer) DeleteKeyRing(context.Context, *DeleteKeyRingRequest) (*KeyRing, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteKeyRing not implemented")
+}
 func (UnimplementedKmsServiceServer) SignContent(context.Context, *SignContentRequest) (*SignContentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignContent not implemented")
 }
@@ -207,6 +466,276 @@ type UnsafeKmsServiceServer interface {
 
 func RegisterKmsServiceServer(s grpc.ServiceRegistrar, srv KmsServiceServer) {
 	s.RegisterService(&KmsService_ServiceDesc, srv)
+}
+
+func _KmsService_CreateKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).CreateKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_CreateKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).CreateKey(ctx, req.(*CreateKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_ListKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListKeysRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).ListKeys(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_ListKeys_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).ListKeys(ctx, req.(*ListKeysRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_GetKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).GetKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_GetKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).GetKey(ctx, req.(*GetKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_UpdateKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).UpdateKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_UpdateKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).UpdateKey(ctx, req.(*UpdateKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_DeleteKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).DeleteKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_DeleteKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).DeleteKey(ctx, req.(*DeleteKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_RotateKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RotateKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).RotateKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_RotateKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).RotateKey(ctx, req.(*RotateKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_GetKeyMaterial_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetKeyMaterialRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).GetKeyMaterial(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_GetKeyMaterial_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).GetKeyMaterial(ctx, req.(*GetKeyMaterialRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_ListKeyMaterials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListKeyMaterialsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).ListKeyMaterials(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_ListKeyMaterials_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).ListKeyMaterials(ctx, req.(*ListKeyMaterialsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_GetKeyMaterialCryptoKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetKeyMaterialRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).GetKeyMaterialCryptoKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_GetKeyMaterialCryptoKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).GetKeyMaterialCryptoKey(ctx, req.(*GetKeyMaterialRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_CreateKeyRing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateKeyRingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).CreateKeyRing(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_CreateKeyRing_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).CreateKeyRing(ctx, req.(*CreateKeyRingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_ListKeyRings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListKeyRingsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).ListKeyRings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_ListKeyRings_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).ListKeyRings(ctx, req.(*ListKeyRingsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_GetKeyRing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetKeyRingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).GetKeyRing(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_GetKeyRing_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).GetKeyRing(ctx, req.(*GetKeyRingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_ListKeyRingPublicKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListKeyRingPublicKeysRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).ListKeyRingPublicKeys(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_ListKeyRingPublicKeys_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).ListKeyRingPublicKeys(ctx, req.(*ListKeyRingPublicKeysRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_UpdateKeyRing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateKeyRingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).UpdateKeyRing(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_UpdateKeyRing_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).UpdateKeyRing(ctx, req.(*UpdateKeyRingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_DeleteKeyRing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteKeyRingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).DeleteKeyRing(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_DeleteKeyRing_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).DeleteKeyRing(ctx, req.(*DeleteKeyRingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _KmsService_SignContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -360,6 +889,66 @@ var KmsService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "blocky.kms.v1alpha.KmsService",
 	HandlerType: (*KmsServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateKey",
+			Handler:    _KmsService_CreateKey_Handler,
+		},
+		{
+			MethodName: "ListKeys",
+			Handler:    _KmsService_ListKeys_Handler,
+		},
+		{
+			MethodName: "GetKey",
+			Handler:    _KmsService_GetKey_Handler,
+		},
+		{
+			MethodName: "UpdateKey",
+			Handler:    _KmsService_UpdateKey_Handler,
+		},
+		{
+			MethodName: "DeleteKey",
+			Handler:    _KmsService_DeleteKey_Handler,
+		},
+		{
+			MethodName: "RotateKey",
+			Handler:    _KmsService_RotateKey_Handler,
+		},
+		{
+			MethodName: "GetKeyMaterial",
+			Handler:    _KmsService_GetKeyMaterial_Handler,
+		},
+		{
+			MethodName: "ListKeyMaterials",
+			Handler:    _KmsService_ListKeyMaterials_Handler,
+		},
+		{
+			MethodName: "GetKeyMaterialCryptoKey",
+			Handler:    _KmsService_GetKeyMaterialCryptoKey_Handler,
+		},
+		{
+			MethodName: "CreateKeyRing",
+			Handler:    _KmsService_CreateKeyRing_Handler,
+		},
+		{
+			MethodName: "ListKeyRings",
+			Handler:    _KmsService_ListKeyRings_Handler,
+		},
+		{
+			MethodName: "GetKeyRing",
+			Handler:    _KmsService_GetKeyRing_Handler,
+		},
+		{
+			MethodName: "ListKeyRingPublicKeys",
+			Handler:    _KmsService_ListKeyRingPublicKeys_Handler,
+		},
+		{
+			MethodName: "UpdateKeyRing",
+			Handler:    _KmsService_UpdateKeyRing_Handler,
+		},
+		{
+			MethodName: "DeleteKeyRing",
+			Handler:    _KmsService_DeleteKeyRing_Handler,
+		},
 		{
 			MethodName: "SignContent",
 			Handler:    _KmsService_SignContent_Handler,
