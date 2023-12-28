@@ -34,12 +34,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ClientAdminService_CreateClient_FullMethodName          = "/blocky.authz.admin.v1alpha.ClientAdminService/CreateClient"
-	ClientAdminService_ListClient_FullMethodName            = "/blocky.authz.admin.v1alpha.ClientAdminService/ListClient"
-	ClientAdminService_GetClient_FullMethodName             = "/blocky.authz.admin.v1alpha.ClientAdminService/GetClient"
-	ClientAdminService_UpdateClient_FullMethodName          = "/blocky.authz.admin.v1alpha.ClientAdminService/UpdateClient"
-	ClientAdminService_DeleteClient_FullMethodName          = "/blocky.authz.admin.v1alpha.ClientAdminService/DeleteClient"
-	ClientAdminService_ShowClientCredentials_FullMethodName = "/blocky.authz.admin.v1alpha.ClientAdminService/ShowClientCredentials"
+	ClientAdminService_CreateClient_FullMethodName                   = "/blocky.authz.admin.v1alpha.ClientAdminService/CreateClient"
+	ClientAdminService_ListClient_FullMethodName                     = "/blocky.authz.admin.v1alpha.ClientAdminService/ListClient"
+	ClientAdminService_GetClient_FullMethodName                      = "/blocky.authz.admin.v1alpha.ClientAdminService/GetClient"
+	ClientAdminService_UpdateClient_FullMethodName                   = "/blocky.authz.admin.v1alpha.ClientAdminService/UpdateClient"
+	ClientAdminService_DeleteClient_FullMethodName                   = "/blocky.authz.admin.v1alpha.ClientAdminService/DeleteClient"
+	ClientAdminService_CreateClientResourcePermission_FullMethodName = "/blocky.authz.admin.v1alpha.ClientAdminService/CreateClientResourcePermission"
+	ClientAdminService_ListClientResourcePermissions_FullMethodName  = "/blocky.authz.admin.v1alpha.ClientAdminService/ListClientResourcePermissions"
 )
 
 // ClientAdminServiceClient is the client API for ClientAdminService service.
@@ -58,8 +59,10 @@ type ClientAdminServiceClient interface {
 	UpdateClient(ctx context.Context, in *UpdateClientRequest, opts ...grpc.CallOption) (*Client, error)
 	// Deletes an authorization client.
 	DeleteClient(ctx context.Context, in *DeleteClientRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// Shows the credentials for an authorization client.
-	ShowClientCredentials(ctx context.Context, in *ShowClientCredentialsRequest, opts ...grpc.CallOption) (*ClientCredentials, error)
+	// CreateClientResourcePermission adds a client the permission to use given resource,
+	// defined by the resource permission.
+	CreateClientResourcePermission(ctx context.Context, in *CreateClientResourcePermissionRequest, opts ...grpc.CallOption) (*ClientResourcePermission, error)
+	ListClientResourcePermissions(ctx context.Context, in *ListClientResourcePermissionsRequest, opts ...grpc.CallOption) (*ListClientResourcePermissionsResponse, error)
 }
 
 type clientAdminServiceClient struct {
@@ -115,9 +118,18 @@ func (c *clientAdminServiceClient) DeleteClient(ctx context.Context, in *DeleteC
 	return out, nil
 }
 
-func (c *clientAdminServiceClient) ShowClientCredentials(ctx context.Context, in *ShowClientCredentialsRequest, opts ...grpc.CallOption) (*ClientCredentials, error) {
-	out := new(ClientCredentials)
-	err := c.cc.Invoke(ctx, ClientAdminService_ShowClientCredentials_FullMethodName, in, out, opts...)
+func (c *clientAdminServiceClient) CreateClientResourcePermission(ctx context.Context, in *CreateClientResourcePermissionRequest, opts ...grpc.CallOption) (*ClientResourcePermission, error) {
+	out := new(ClientResourcePermission)
+	err := c.cc.Invoke(ctx, ClientAdminService_CreateClientResourcePermission_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clientAdminServiceClient) ListClientResourcePermissions(ctx context.Context, in *ListClientResourcePermissionsRequest, opts ...grpc.CallOption) (*ListClientResourcePermissionsResponse, error) {
+	out := new(ListClientResourcePermissionsResponse)
+	err := c.cc.Invoke(ctx, ClientAdminService_ListClientResourcePermissions_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -140,8 +152,10 @@ type ClientAdminServiceServer interface {
 	UpdateClient(context.Context, *UpdateClientRequest) (*Client, error)
 	// Deletes an authorization client.
 	DeleteClient(context.Context, *DeleteClientRequest) (*emptypb.Empty, error)
-	// Shows the credentials for an authorization client.
-	ShowClientCredentials(context.Context, *ShowClientCredentialsRequest) (*ClientCredentials, error)
+	// CreateClientResourcePermission adds a client the permission to use given resource,
+	// defined by the resource permission.
+	CreateClientResourcePermission(context.Context, *CreateClientResourcePermissionRequest) (*ClientResourcePermission, error)
+	ListClientResourcePermissions(context.Context, *ListClientResourcePermissionsRequest) (*ListClientResourcePermissionsResponse, error)
 	mustEmbedUnimplementedClientAdminServiceServer()
 }
 
@@ -164,8 +178,11 @@ func (UnimplementedClientAdminServiceServer) UpdateClient(context.Context, *Upda
 func (UnimplementedClientAdminServiceServer) DeleteClient(context.Context, *DeleteClientRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteClient not implemented")
 }
-func (UnimplementedClientAdminServiceServer) ShowClientCredentials(context.Context, *ShowClientCredentialsRequest) (*ClientCredentials, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ShowClientCredentials not implemented")
+func (UnimplementedClientAdminServiceServer) CreateClientResourcePermission(context.Context, *CreateClientResourcePermissionRequest) (*ClientResourcePermission, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateClientResourcePermission not implemented")
+}
+func (UnimplementedClientAdminServiceServer) ListClientResourcePermissions(context.Context, *ListClientResourcePermissionsRequest) (*ListClientResourcePermissionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListClientResourcePermissions not implemented")
 }
 func (UnimplementedClientAdminServiceServer) mustEmbedUnimplementedClientAdminServiceServer() {}
 
@@ -270,20 +287,38 @@ func _ClientAdminService_DeleteClient_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ClientAdminService_ShowClientCredentials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ShowClientCredentialsRequest)
+func _ClientAdminService_CreateClientResourcePermission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateClientResourcePermissionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClientAdminServiceServer).ShowClientCredentials(ctx, in)
+		return srv.(ClientAdminServiceServer).CreateClientResourcePermission(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ClientAdminService_ShowClientCredentials_FullMethodName,
+		FullMethod: ClientAdminService_CreateClientResourcePermission_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClientAdminServiceServer).ShowClientCredentials(ctx, req.(*ShowClientCredentialsRequest))
+		return srv.(ClientAdminServiceServer).CreateClientResourcePermission(ctx, req.(*CreateClientResourcePermissionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClientAdminService_ListClientResourcePermissions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListClientResourcePermissionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClientAdminServiceServer).ListClientResourcePermissions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ClientAdminService_ListClientResourcePermissions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClientAdminServiceServer).ListClientResourcePermissions(ctx, req.(*ListClientResourcePermissionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -316,8 +351,12 @@ var ClientAdminService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ClientAdminService_DeleteClient_Handler,
 		},
 		{
-			MethodName: "ShowClientCredentials",
-			Handler:    _ClientAdminService_ShowClientCredentials_Handler,
+			MethodName: "CreateClientResourcePermission",
+			Handler:    _ClientAdminService_CreateClientResourcePermission_Handler,
+		},
+		{
+			MethodName: "ListClientResourcePermissions",
+			Handler:    _ClientAdminService_ListClientResourcePermissions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

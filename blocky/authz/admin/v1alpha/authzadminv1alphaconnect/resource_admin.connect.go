@@ -84,6 +84,9 @@ const (
 	// ResourceAdminServiceAliasResourcePermissionProcedure is the fully-qualified name of the
 	// ResourceAdminService's AliasResourcePermission RPC.
 	ResourceAdminServiceAliasResourcePermissionProcedure = "/blocky.authz.admin.v1alpha.ResourceAdminService/AliasResourcePermission"
+	// ResourceAdminServiceListResourcePermissionUserConsentsProcedure is the fully-qualified name of
+	// the ResourceAdminService's ListResourcePermissionUserConsents RPC.
+	ResourceAdminServiceListResourcePermissionUserConsentsProcedure = "/blocky.authz.admin.v1alpha.ResourceAdminService/ListResourcePermissionUserConsents"
 )
 
 // ResourceAdminServiceClient is a client for the blocky.authz.admin.v1alpha.ResourceAdminService
@@ -117,6 +120,8 @@ type ResourceAdminServiceClient interface {
 	// If the alias already exists, the former aliased resource permission will have
 	// no alias.
 	AliasResourcePermission(context.Context, *connect_go.Request[v1alpha.AliasResourcePermissionRequest]) (*connect_go.Response[v1alpha.ResourcePermission], error)
+	// Lists user consents associated with given resource permission.
+	ListResourcePermissionUserConsents(context.Context, *connect_go.Request[v1alpha.ListResourcePermissionUserConsentsRequest]) (*connect_go.Response[v1alpha.ListResourcePermissionUserConsentsResponse], error)
 }
 
 // NewResourceAdminServiceClient constructs a client for the
@@ -190,23 +195,29 @@ func NewResourceAdminServiceClient(httpClient connect_go.HTTPClient, baseURL str
 			baseURL+ResourceAdminServiceAliasResourcePermissionProcedure,
 			opts...,
 		),
+		listResourcePermissionUserConsents: connect_go.NewClient[v1alpha.ListResourcePermissionUserConsentsRequest, v1alpha.ListResourcePermissionUserConsentsResponse](
+			httpClient,
+			baseURL+ResourceAdminServiceListResourcePermissionUserConsentsProcedure,
+			opts...,
+		),
 	}
 }
 
 // resourceAdminServiceClient implements ResourceAdminServiceClient.
 type resourceAdminServiceClient struct {
-	createResourceManager    *connect_go.Client[v1alpha.CreateResourceManagerRequest, v1alpha.ResourceManager]
-	getResourceManager       *connect_go.Client[v1alpha.GetResourceManagerRequest, v1alpha.ResourceManager]
-	listResourceManagers     *connect_go.Client[v1alpha.ListResourceManagersRequest, v1alpha.ListResourceManagersResponse]
-	updateResourceManager    *connect_go.Client[v1alpha.UpdateResourceManagerRequest, v1alpha.ResourceManager]
-	deleteResourceManager    *connect_go.Client[v1alpha.DeleteResourceRequest, emptypb.Empty]
-	aliasResourceManager     *connect_go.Client[v1alpha.AliasResourceRequest, v1alpha.ResourceManager]
-	createResourcePermission *connect_go.Client[v1alpha.CreateResourcePermissionRequest, v1alpha.ResourcePermission]
-	listResourcePermission   *connect_go.Client[v1alpha.ListResourcePermissionRequest, v1alpha.ListResourcePermissionResponse]
-	getResourcePermission    *connect_go.Client[v1alpha.GetResourcePermissionRequest, v1alpha.ResourcePermission]
-	updateResourcePermission *connect_go.Client[v1alpha.UpdateResourcePermissionRequest, v1alpha.ResourcePermission]
-	deleteResourcePermission *connect_go.Client[v1alpha.DeleteResourcePermissionRequest, emptypb.Empty]
-	aliasResourcePermission  *connect_go.Client[v1alpha.AliasResourcePermissionRequest, v1alpha.ResourcePermission]
+	createResourceManager              *connect_go.Client[v1alpha.CreateResourceManagerRequest, v1alpha.ResourceManager]
+	getResourceManager                 *connect_go.Client[v1alpha.GetResourceManagerRequest, v1alpha.ResourceManager]
+	listResourceManagers               *connect_go.Client[v1alpha.ListResourceManagersRequest, v1alpha.ListResourceManagersResponse]
+	updateResourceManager              *connect_go.Client[v1alpha.UpdateResourceManagerRequest, v1alpha.ResourceManager]
+	deleteResourceManager              *connect_go.Client[v1alpha.DeleteResourceRequest, emptypb.Empty]
+	aliasResourceManager               *connect_go.Client[v1alpha.AliasResourceRequest, v1alpha.ResourceManager]
+	createResourcePermission           *connect_go.Client[v1alpha.CreateResourcePermissionRequest, v1alpha.ResourcePermission]
+	listResourcePermission             *connect_go.Client[v1alpha.ListResourcePermissionRequest, v1alpha.ListResourcePermissionResponse]
+	getResourcePermission              *connect_go.Client[v1alpha.GetResourcePermissionRequest, v1alpha.ResourcePermission]
+	updateResourcePermission           *connect_go.Client[v1alpha.UpdateResourcePermissionRequest, v1alpha.ResourcePermission]
+	deleteResourcePermission           *connect_go.Client[v1alpha.DeleteResourcePermissionRequest, emptypb.Empty]
+	aliasResourcePermission            *connect_go.Client[v1alpha.AliasResourcePermissionRequest, v1alpha.ResourcePermission]
+	listResourcePermissionUserConsents *connect_go.Client[v1alpha.ListResourcePermissionUserConsentsRequest, v1alpha.ListResourcePermissionUserConsentsResponse]
 }
 
 // CreateResourceManager calls
@@ -278,6 +289,12 @@ func (c *resourceAdminServiceClient) AliasResourcePermission(ctx context.Context
 	return c.aliasResourcePermission.CallUnary(ctx, req)
 }
 
+// ListResourcePermissionUserConsents calls
+// blocky.authz.admin.v1alpha.ResourceAdminService.ListResourcePermissionUserConsents.
+func (c *resourceAdminServiceClient) ListResourcePermissionUserConsents(ctx context.Context, req *connect_go.Request[v1alpha.ListResourcePermissionUserConsentsRequest]) (*connect_go.Response[v1alpha.ListResourcePermissionUserConsentsResponse], error) {
+	return c.listResourcePermissionUserConsents.CallUnary(ctx, req)
+}
+
 // ResourceAdminServiceHandler is an implementation of the
 // blocky.authz.admin.v1alpha.ResourceAdminService service.
 type ResourceAdminServiceHandler interface {
@@ -309,6 +326,8 @@ type ResourceAdminServiceHandler interface {
 	// If the alias already exists, the former aliased resource permission will have
 	// no alias.
 	AliasResourcePermission(context.Context, *connect_go.Request[v1alpha.AliasResourcePermissionRequest]) (*connect_go.Response[v1alpha.ResourcePermission], error)
+	// Lists user consents associated with given resource permission.
+	ListResourcePermissionUserConsents(context.Context, *connect_go.Request[v1alpha.ListResourcePermissionUserConsentsRequest]) (*connect_go.Response[v1alpha.ListResourcePermissionUserConsentsResponse], error)
 }
 
 // NewResourceAdminServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -377,6 +396,11 @@ func NewResourceAdminServiceHandler(svc ResourceAdminServiceHandler, opts ...con
 		svc.AliasResourcePermission,
 		opts...,
 	)
+	resourceAdminServiceListResourcePermissionUserConsentsHandler := connect_go.NewUnaryHandler(
+		ResourceAdminServiceListResourcePermissionUserConsentsProcedure,
+		svc.ListResourcePermissionUserConsents,
+		opts...,
+	)
 	return "/blocky.authz.admin.v1alpha.ResourceAdminService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case ResourceAdminServiceCreateResourceManagerProcedure:
@@ -403,6 +427,8 @@ func NewResourceAdminServiceHandler(svc ResourceAdminServiceHandler, opts ...con
 			resourceAdminServiceDeleteResourcePermissionHandler.ServeHTTP(w, r)
 		case ResourceAdminServiceAliasResourcePermissionProcedure:
 			resourceAdminServiceAliasResourcePermissionHandler.ServeHTTP(w, r)
+		case ResourceAdminServiceListResourcePermissionUserConsentsProcedure:
+			resourceAdminServiceListResourcePermissionUserConsentsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -458,4 +484,8 @@ func (UnimplementedResourceAdminServiceHandler) DeleteResourcePermission(context
 
 func (UnimplementedResourceAdminServiceHandler) AliasResourcePermission(context.Context, *connect_go.Request[v1alpha.AliasResourcePermissionRequest]) (*connect_go.Response[v1alpha.ResourcePermission], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.ResourceAdminService.AliasResourcePermission is not implemented"))
+}
+
+func (UnimplementedResourceAdminServiceHandler) ListResourcePermissionUserConsents(context.Context, *connect_go.Request[v1alpha.ListResourcePermissionUserConsentsRequest]) (*connect_go.Response[v1alpha.ListResourcePermissionUserConsentsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.ResourceAdminService.ListResourcePermissionUserConsents is not implemented"))
 }

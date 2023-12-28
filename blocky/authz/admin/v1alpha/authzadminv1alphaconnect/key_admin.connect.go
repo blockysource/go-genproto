@@ -47,56 +47,58 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// KeyAdminServiceCreateKeyProcedure is the fully-qualified name of the KeyAdminService's CreateKey
+	// KeyAdminServiceCreateKeyCoreProcedure is the fully-qualified name of the KeyAdminService's
+	// CreateKeyCore RPC.
+	KeyAdminServiceCreateKeyCoreProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/CreateKeyCore"
+	// KeyAdminServiceGetKeyCoreProcedure is the fully-qualified name of the KeyAdminService's
+	// GetKeyCore RPC.
+	KeyAdminServiceGetKeyCoreProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/GetKeyCore"
+	// KeyAdminServiceListKeyCoresProcedure is the fully-qualified name of the KeyAdminService's
+	// ListKeyCores RPC.
+	KeyAdminServiceListKeyCoresProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/ListKeyCores"
+	// KeyAdminServiceListKeyCoreKeysProcedure is the fully-qualified name of the KeyAdminService's
+	// ListKeyCoreKeys RPC.
+	KeyAdminServiceListKeyCoreKeysProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/ListKeyCoreKeys"
+	// KeyAdminServiceUpdateKeyCoreProcedure is the fully-qualified name of the KeyAdminService's
+	// UpdateKeyCore RPC.
+	KeyAdminServiceUpdateKeyCoreProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/UpdateKeyCore"
+	// KeyAdminServiceRotateKeyProcedure is the fully-qualified name of the KeyAdminService's RotateKey
 	// RPC.
-	KeyAdminServiceCreateKeyProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/CreateKey"
+	KeyAdminServiceRotateKeyProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/RotateKey"
 	// KeyAdminServiceGetKeyProcedure is the fully-qualified name of the KeyAdminService's GetKey RPC.
 	KeyAdminServiceGetKeyProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/GetKey"
 	// KeyAdminServiceListKeysProcedure is the fully-qualified name of the KeyAdminService's ListKeys
 	// RPC.
 	KeyAdminServiceListKeysProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/ListKeys"
-	// KeyAdminServiceUpdateKeyProcedure is the fully-qualified name of the KeyAdminService's UpdateKey
+	// KeyAdminServiceRevokeKeyProcedure is the fully-qualified name of the KeyAdminService's RevokeKey
 	// RPC.
-	KeyAdminServiceUpdateKeyProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/UpdateKey"
-	// KeyAdminServiceCreateKeyRevisionProcedure is the fully-qualified name of the KeyAdminService's
-	// CreateKeyRevision RPC.
-	KeyAdminServiceCreateKeyRevisionProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/CreateKeyRevision"
-	// KeyAdminServiceGetKeyRevisionProcedure is the fully-qualified name of the KeyAdminService's
-	// GetKeyRevision RPC.
-	KeyAdminServiceGetKeyRevisionProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/GetKeyRevision"
-	// KeyAdminServiceListKeyRevisionsProcedure is the fully-qualified name of the KeyAdminService's
-	// ListKeyRevisions RPC.
-	KeyAdminServiceListKeyRevisionsProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/ListKeyRevisions"
-	// KeyAdminServiceRevokeKeyRevisionProcedure is the fully-qualified name of the KeyAdminService's
-	// RevokeKeyRevision RPC.
-	KeyAdminServiceRevokeKeyRevisionProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/RevokeKeyRevision"
+	KeyAdminServiceRevokeKeyProcedure = "/blocky.authz.admin.v1alpha.KeyAdminService/RevokeKey"
 )
 
 // KeyAdminServiceClient is a client for the blocky.authz.admin.v1alpha.KeyAdminService service.
 type KeyAdminServiceClient interface {
-	// CreateKey creates a new authorization key.
+	// CreateKeyCore creates a new authorization key.
 	// New key is neither active nor used in a set.
-	CreateKey(context.Context, *connect_go.Request[v1alpha.CreateKeyRequest]) (*connect_go.Response[v1alpha.Key], error)
-	// GetKey returns the specified authorization key.
-	// The name of the key may be used as:
-	// 'projects/{project}/keys/default' to get the default key for the project.
+	CreateKeyCore(context.Context, *connect_go.Request[v1alpha.CreateKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error)
+	// GetKeyCore returns the specified authorization key.
+	GetKeyCore(context.Context, *connect_go.Request[v1alpha.GetKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error)
+	// ListKeyCores lists authorization keys that matches given request.
+	ListKeyCores(context.Context, *connect_go.Request[v1alpha.ListKeyCoresRequest]) (*connect_go.Response[v1alpha.ListKeyCoresResponse], error)
+	// ListKeyCoreKeys lists authorization keys that matches given request.
+	ListKeyCoreKeys(context.Context, *connect_go.Request[v1alpha.ListKeyCoreKeysRequest]) (*connect_go.Response[v1alpha.ListKeyCoreKeysResponse], error)
+	// UpdateKeyCore updates the specified authorization key.
+	UpdateKeyCore(context.Context, *connect_go.Request[v1alpha.UpdateKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error)
+	// Creates a new key revision and rotates the key.
+	RotateKey(context.Context, *connect_go.Request[v1alpha.RotateKeyRequest]) (*connect_go.Response[v1alpha.Key], error)
+	// GetKey returns the specified key revision.
 	GetKey(context.Context, *connect_go.Request[v1alpha.GetKeyRequest]) (*connect_go.Response[v1alpha.Key], error)
 	// ListKeys lists authorization keys that matches given request.
 	ListKeys(context.Context, *connect_go.Request[v1alpha.ListKeysRequest]) (*connect_go.Response[v1alpha.ListKeysResponse], error)
-	// UpdateKey updates the specified authorization key.
-	UpdateKey(context.Context, *connect_go.Request[v1alpha.UpdateKeyRequest]) (*connect_go.Response[v1alpha.Key], error)
-	// Creates a new key revision and rotates the key.
-	CreateKeyRevision(context.Context, *connect_go.Request[v1alpha.CreateKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error)
-	// GetKeyRevision returns the specified key revision.
-	GetKeyRevision(context.Context, *connect_go.Request[v1alpha.GetKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error)
-	// ListKeyRevisions lists authorization key revisions that matches given request.
-	// The key revisions are derived from the parent key.
-	ListKeyRevisions(context.Context, *connect_go.Request[v1alpha.ListKeyRevisionsRequest]) (*connect_go.Response[v1alpha.ListKeyRevisionsResponse], error)
-	// RevokeKeyRevision revokes an authorization key revision.
+	// RevokeKey revokes an authorization key revision.
 	// Once revoked the key revision is no longer valid for signing and verification.
 	// If revoked key was the only active signing key, the system will not accept
 	// any new requests until a new key is created and activated.
-	RevokeKeyRevision(context.Context, *connect_go.Request[v1alpha.RevokeKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error)
+	RevokeKey(context.Context, *connect_go.Request[v1alpha.RevokeKeyRequest]) (*connect_go.Response[v1alpha.Key], error)
 }
 
 // NewKeyAdminServiceClient constructs a client for the blocky.authz.admin.v1alpha.KeyAdminService
@@ -109,9 +111,34 @@ type KeyAdminServiceClient interface {
 func NewKeyAdminServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) KeyAdminServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	return &keyAdminServiceClient{
-		createKey: connect_go.NewClient[v1alpha.CreateKeyRequest, v1alpha.Key](
+		createKeyCore: connect_go.NewClient[v1alpha.CreateKeyCoreRequest, v1alpha.KeyCore](
 			httpClient,
-			baseURL+KeyAdminServiceCreateKeyProcedure,
+			baseURL+KeyAdminServiceCreateKeyCoreProcedure,
+			opts...,
+		),
+		getKeyCore: connect_go.NewClient[v1alpha.GetKeyCoreRequest, v1alpha.KeyCore](
+			httpClient,
+			baseURL+KeyAdminServiceGetKeyCoreProcedure,
+			opts...,
+		),
+		listKeyCores: connect_go.NewClient[v1alpha.ListKeyCoresRequest, v1alpha.ListKeyCoresResponse](
+			httpClient,
+			baseURL+KeyAdminServiceListKeyCoresProcedure,
+			opts...,
+		),
+		listKeyCoreKeys: connect_go.NewClient[v1alpha.ListKeyCoreKeysRequest, v1alpha.ListKeyCoreKeysResponse](
+			httpClient,
+			baseURL+KeyAdminServiceListKeyCoreKeysProcedure,
+			opts...,
+		),
+		updateKeyCore: connect_go.NewClient[v1alpha.UpdateKeyCoreRequest, v1alpha.KeyCore](
+			httpClient,
+			baseURL+KeyAdminServiceUpdateKeyCoreProcedure,
+			opts...,
+		),
+		rotateKey: connect_go.NewClient[v1alpha.RotateKeyRequest, v1alpha.Key](
+			httpClient,
+			baseURL+KeyAdminServiceRotateKeyProcedure,
 			opts...,
 		),
 		getKey: connect_go.NewClient[v1alpha.GetKeyRequest, v1alpha.Key](
@@ -124,29 +151,9 @@ func NewKeyAdminServiceClient(httpClient connect_go.HTTPClient, baseURL string, 
 			baseURL+KeyAdminServiceListKeysProcedure,
 			opts...,
 		),
-		updateKey: connect_go.NewClient[v1alpha.UpdateKeyRequest, v1alpha.Key](
+		revokeKey: connect_go.NewClient[v1alpha.RevokeKeyRequest, v1alpha.Key](
 			httpClient,
-			baseURL+KeyAdminServiceUpdateKeyProcedure,
-			opts...,
-		),
-		createKeyRevision: connect_go.NewClient[v1alpha.CreateKeyRevisionRequest, v1alpha.KeyRevision](
-			httpClient,
-			baseURL+KeyAdminServiceCreateKeyRevisionProcedure,
-			opts...,
-		),
-		getKeyRevision: connect_go.NewClient[v1alpha.GetKeyRevisionRequest, v1alpha.KeyRevision](
-			httpClient,
-			baseURL+KeyAdminServiceGetKeyRevisionProcedure,
-			opts...,
-		),
-		listKeyRevisions: connect_go.NewClient[v1alpha.ListKeyRevisionsRequest, v1alpha.ListKeyRevisionsResponse](
-			httpClient,
-			baseURL+KeyAdminServiceListKeyRevisionsProcedure,
-			opts...,
-		),
-		revokeKeyRevision: connect_go.NewClient[v1alpha.RevokeKeyRevisionRequest, v1alpha.KeyRevision](
-			httpClient,
-			baseURL+KeyAdminServiceRevokeKeyRevisionProcedure,
+			baseURL+KeyAdminServiceRevokeKeyProcedure,
 			opts...,
 		),
 	}
@@ -154,19 +161,45 @@ func NewKeyAdminServiceClient(httpClient connect_go.HTTPClient, baseURL string, 
 
 // keyAdminServiceClient implements KeyAdminServiceClient.
 type keyAdminServiceClient struct {
-	createKey         *connect_go.Client[v1alpha.CreateKeyRequest, v1alpha.Key]
-	getKey            *connect_go.Client[v1alpha.GetKeyRequest, v1alpha.Key]
-	listKeys          *connect_go.Client[v1alpha.ListKeysRequest, v1alpha.ListKeysResponse]
-	updateKey         *connect_go.Client[v1alpha.UpdateKeyRequest, v1alpha.Key]
-	createKeyRevision *connect_go.Client[v1alpha.CreateKeyRevisionRequest, v1alpha.KeyRevision]
-	getKeyRevision    *connect_go.Client[v1alpha.GetKeyRevisionRequest, v1alpha.KeyRevision]
-	listKeyRevisions  *connect_go.Client[v1alpha.ListKeyRevisionsRequest, v1alpha.ListKeyRevisionsResponse]
-	revokeKeyRevision *connect_go.Client[v1alpha.RevokeKeyRevisionRequest, v1alpha.KeyRevision]
+	createKeyCore   *connect_go.Client[v1alpha.CreateKeyCoreRequest, v1alpha.KeyCore]
+	getKeyCore      *connect_go.Client[v1alpha.GetKeyCoreRequest, v1alpha.KeyCore]
+	listKeyCores    *connect_go.Client[v1alpha.ListKeyCoresRequest, v1alpha.ListKeyCoresResponse]
+	listKeyCoreKeys *connect_go.Client[v1alpha.ListKeyCoreKeysRequest, v1alpha.ListKeyCoreKeysResponse]
+	updateKeyCore   *connect_go.Client[v1alpha.UpdateKeyCoreRequest, v1alpha.KeyCore]
+	rotateKey       *connect_go.Client[v1alpha.RotateKeyRequest, v1alpha.Key]
+	getKey          *connect_go.Client[v1alpha.GetKeyRequest, v1alpha.Key]
+	listKeys        *connect_go.Client[v1alpha.ListKeysRequest, v1alpha.ListKeysResponse]
+	revokeKey       *connect_go.Client[v1alpha.RevokeKeyRequest, v1alpha.Key]
 }
 
-// CreateKey calls blocky.authz.admin.v1alpha.KeyAdminService.CreateKey.
-func (c *keyAdminServiceClient) CreateKey(ctx context.Context, req *connect_go.Request[v1alpha.CreateKeyRequest]) (*connect_go.Response[v1alpha.Key], error) {
-	return c.createKey.CallUnary(ctx, req)
+// CreateKeyCore calls blocky.authz.admin.v1alpha.KeyAdminService.CreateKeyCore.
+func (c *keyAdminServiceClient) CreateKeyCore(ctx context.Context, req *connect_go.Request[v1alpha.CreateKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error) {
+	return c.createKeyCore.CallUnary(ctx, req)
+}
+
+// GetKeyCore calls blocky.authz.admin.v1alpha.KeyAdminService.GetKeyCore.
+func (c *keyAdminServiceClient) GetKeyCore(ctx context.Context, req *connect_go.Request[v1alpha.GetKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error) {
+	return c.getKeyCore.CallUnary(ctx, req)
+}
+
+// ListKeyCores calls blocky.authz.admin.v1alpha.KeyAdminService.ListKeyCores.
+func (c *keyAdminServiceClient) ListKeyCores(ctx context.Context, req *connect_go.Request[v1alpha.ListKeyCoresRequest]) (*connect_go.Response[v1alpha.ListKeyCoresResponse], error) {
+	return c.listKeyCores.CallUnary(ctx, req)
+}
+
+// ListKeyCoreKeys calls blocky.authz.admin.v1alpha.KeyAdminService.ListKeyCoreKeys.
+func (c *keyAdminServiceClient) ListKeyCoreKeys(ctx context.Context, req *connect_go.Request[v1alpha.ListKeyCoreKeysRequest]) (*connect_go.Response[v1alpha.ListKeyCoreKeysResponse], error) {
+	return c.listKeyCoreKeys.CallUnary(ctx, req)
+}
+
+// UpdateKeyCore calls blocky.authz.admin.v1alpha.KeyAdminService.UpdateKeyCore.
+func (c *keyAdminServiceClient) UpdateKeyCore(ctx context.Context, req *connect_go.Request[v1alpha.UpdateKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error) {
+	return c.updateKeyCore.CallUnary(ctx, req)
+}
+
+// RotateKey calls blocky.authz.admin.v1alpha.KeyAdminService.RotateKey.
+func (c *keyAdminServiceClient) RotateKey(ctx context.Context, req *connect_go.Request[v1alpha.RotateKeyRequest]) (*connect_go.Response[v1alpha.Key], error) {
+	return c.rotateKey.CallUnary(ctx, req)
 }
 
 // GetKey calls blocky.authz.admin.v1alpha.KeyAdminService.GetKey.
@@ -179,57 +212,36 @@ func (c *keyAdminServiceClient) ListKeys(ctx context.Context, req *connect_go.Re
 	return c.listKeys.CallUnary(ctx, req)
 }
 
-// UpdateKey calls blocky.authz.admin.v1alpha.KeyAdminService.UpdateKey.
-func (c *keyAdminServiceClient) UpdateKey(ctx context.Context, req *connect_go.Request[v1alpha.UpdateKeyRequest]) (*connect_go.Response[v1alpha.Key], error) {
-	return c.updateKey.CallUnary(ctx, req)
-}
-
-// CreateKeyRevision calls blocky.authz.admin.v1alpha.KeyAdminService.CreateKeyRevision.
-func (c *keyAdminServiceClient) CreateKeyRevision(ctx context.Context, req *connect_go.Request[v1alpha.CreateKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error) {
-	return c.createKeyRevision.CallUnary(ctx, req)
-}
-
-// GetKeyRevision calls blocky.authz.admin.v1alpha.KeyAdminService.GetKeyRevision.
-func (c *keyAdminServiceClient) GetKeyRevision(ctx context.Context, req *connect_go.Request[v1alpha.GetKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error) {
-	return c.getKeyRevision.CallUnary(ctx, req)
-}
-
-// ListKeyRevisions calls blocky.authz.admin.v1alpha.KeyAdminService.ListKeyRevisions.
-func (c *keyAdminServiceClient) ListKeyRevisions(ctx context.Context, req *connect_go.Request[v1alpha.ListKeyRevisionsRequest]) (*connect_go.Response[v1alpha.ListKeyRevisionsResponse], error) {
-	return c.listKeyRevisions.CallUnary(ctx, req)
-}
-
-// RevokeKeyRevision calls blocky.authz.admin.v1alpha.KeyAdminService.RevokeKeyRevision.
-func (c *keyAdminServiceClient) RevokeKeyRevision(ctx context.Context, req *connect_go.Request[v1alpha.RevokeKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error) {
-	return c.revokeKeyRevision.CallUnary(ctx, req)
+// RevokeKey calls blocky.authz.admin.v1alpha.KeyAdminService.RevokeKey.
+func (c *keyAdminServiceClient) RevokeKey(ctx context.Context, req *connect_go.Request[v1alpha.RevokeKeyRequest]) (*connect_go.Response[v1alpha.Key], error) {
+	return c.revokeKey.CallUnary(ctx, req)
 }
 
 // KeyAdminServiceHandler is an implementation of the blocky.authz.admin.v1alpha.KeyAdminService
 // service.
 type KeyAdminServiceHandler interface {
-	// CreateKey creates a new authorization key.
+	// CreateKeyCore creates a new authorization key.
 	// New key is neither active nor used in a set.
-	CreateKey(context.Context, *connect_go.Request[v1alpha.CreateKeyRequest]) (*connect_go.Response[v1alpha.Key], error)
-	// GetKey returns the specified authorization key.
-	// The name of the key may be used as:
-	// 'projects/{project}/keys/default' to get the default key for the project.
+	CreateKeyCore(context.Context, *connect_go.Request[v1alpha.CreateKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error)
+	// GetKeyCore returns the specified authorization key.
+	GetKeyCore(context.Context, *connect_go.Request[v1alpha.GetKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error)
+	// ListKeyCores lists authorization keys that matches given request.
+	ListKeyCores(context.Context, *connect_go.Request[v1alpha.ListKeyCoresRequest]) (*connect_go.Response[v1alpha.ListKeyCoresResponse], error)
+	// ListKeyCoreKeys lists authorization keys that matches given request.
+	ListKeyCoreKeys(context.Context, *connect_go.Request[v1alpha.ListKeyCoreKeysRequest]) (*connect_go.Response[v1alpha.ListKeyCoreKeysResponse], error)
+	// UpdateKeyCore updates the specified authorization key.
+	UpdateKeyCore(context.Context, *connect_go.Request[v1alpha.UpdateKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error)
+	// Creates a new key revision and rotates the key.
+	RotateKey(context.Context, *connect_go.Request[v1alpha.RotateKeyRequest]) (*connect_go.Response[v1alpha.Key], error)
+	// GetKey returns the specified key revision.
 	GetKey(context.Context, *connect_go.Request[v1alpha.GetKeyRequest]) (*connect_go.Response[v1alpha.Key], error)
 	// ListKeys lists authorization keys that matches given request.
 	ListKeys(context.Context, *connect_go.Request[v1alpha.ListKeysRequest]) (*connect_go.Response[v1alpha.ListKeysResponse], error)
-	// UpdateKey updates the specified authorization key.
-	UpdateKey(context.Context, *connect_go.Request[v1alpha.UpdateKeyRequest]) (*connect_go.Response[v1alpha.Key], error)
-	// Creates a new key revision and rotates the key.
-	CreateKeyRevision(context.Context, *connect_go.Request[v1alpha.CreateKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error)
-	// GetKeyRevision returns the specified key revision.
-	GetKeyRevision(context.Context, *connect_go.Request[v1alpha.GetKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error)
-	// ListKeyRevisions lists authorization key revisions that matches given request.
-	// The key revisions are derived from the parent key.
-	ListKeyRevisions(context.Context, *connect_go.Request[v1alpha.ListKeyRevisionsRequest]) (*connect_go.Response[v1alpha.ListKeyRevisionsResponse], error)
-	// RevokeKeyRevision revokes an authorization key revision.
+	// RevokeKey revokes an authorization key revision.
 	// Once revoked the key revision is no longer valid for signing and verification.
 	// If revoked key was the only active signing key, the system will not accept
 	// any new requests until a new key is created and activated.
-	RevokeKeyRevision(context.Context, *connect_go.Request[v1alpha.RevokeKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error)
+	RevokeKey(context.Context, *connect_go.Request[v1alpha.RevokeKeyRequest]) (*connect_go.Response[v1alpha.Key], error)
 }
 
 // NewKeyAdminServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -238,9 +250,34 @@ type KeyAdminServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewKeyAdminServiceHandler(svc KeyAdminServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	keyAdminServiceCreateKeyHandler := connect_go.NewUnaryHandler(
-		KeyAdminServiceCreateKeyProcedure,
-		svc.CreateKey,
+	keyAdminServiceCreateKeyCoreHandler := connect_go.NewUnaryHandler(
+		KeyAdminServiceCreateKeyCoreProcedure,
+		svc.CreateKeyCore,
+		opts...,
+	)
+	keyAdminServiceGetKeyCoreHandler := connect_go.NewUnaryHandler(
+		KeyAdminServiceGetKeyCoreProcedure,
+		svc.GetKeyCore,
+		opts...,
+	)
+	keyAdminServiceListKeyCoresHandler := connect_go.NewUnaryHandler(
+		KeyAdminServiceListKeyCoresProcedure,
+		svc.ListKeyCores,
+		opts...,
+	)
+	keyAdminServiceListKeyCoreKeysHandler := connect_go.NewUnaryHandler(
+		KeyAdminServiceListKeyCoreKeysProcedure,
+		svc.ListKeyCoreKeys,
+		opts...,
+	)
+	keyAdminServiceUpdateKeyCoreHandler := connect_go.NewUnaryHandler(
+		KeyAdminServiceUpdateKeyCoreProcedure,
+		svc.UpdateKeyCore,
+		opts...,
+	)
+	keyAdminServiceRotateKeyHandler := connect_go.NewUnaryHandler(
+		KeyAdminServiceRotateKeyProcedure,
+		svc.RotateKey,
 		opts...,
 	)
 	keyAdminServiceGetKeyHandler := connect_go.NewUnaryHandler(
@@ -253,49 +290,31 @@ func NewKeyAdminServiceHandler(svc KeyAdminServiceHandler, opts ...connect_go.Ha
 		svc.ListKeys,
 		opts...,
 	)
-	keyAdminServiceUpdateKeyHandler := connect_go.NewUnaryHandler(
-		KeyAdminServiceUpdateKeyProcedure,
-		svc.UpdateKey,
-		opts...,
-	)
-	keyAdminServiceCreateKeyRevisionHandler := connect_go.NewUnaryHandler(
-		KeyAdminServiceCreateKeyRevisionProcedure,
-		svc.CreateKeyRevision,
-		opts...,
-	)
-	keyAdminServiceGetKeyRevisionHandler := connect_go.NewUnaryHandler(
-		KeyAdminServiceGetKeyRevisionProcedure,
-		svc.GetKeyRevision,
-		opts...,
-	)
-	keyAdminServiceListKeyRevisionsHandler := connect_go.NewUnaryHandler(
-		KeyAdminServiceListKeyRevisionsProcedure,
-		svc.ListKeyRevisions,
-		opts...,
-	)
-	keyAdminServiceRevokeKeyRevisionHandler := connect_go.NewUnaryHandler(
-		KeyAdminServiceRevokeKeyRevisionProcedure,
-		svc.RevokeKeyRevision,
+	keyAdminServiceRevokeKeyHandler := connect_go.NewUnaryHandler(
+		KeyAdminServiceRevokeKeyProcedure,
+		svc.RevokeKey,
 		opts...,
 	)
 	return "/blocky.authz.admin.v1alpha.KeyAdminService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case KeyAdminServiceCreateKeyProcedure:
-			keyAdminServiceCreateKeyHandler.ServeHTTP(w, r)
+		case KeyAdminServiceCreateKeyCoreProcedure:
+			keyAdminServiceCreateKeyCoreHandler.ServeHTTP(w, r)
+		case KeyAdminServiceGetKeyCoreProcedure:
+			keyAdminServiceGetKeyCoreHandler.ServeHTTP(w, r)
+		case KeyAdminServiceListKeyCoresProcedure:
+			keyAdminServiceListKeyCoresHandler.ServeHTTP(w, r)
+		case KeyAdminServiceListKeyCoreKeysProcedure:
+			keyAdminServiceListKeyCoreKeysHandler.ServeHTTP(w, r)
+		case KeyAdminServiceUpdateKeyCoreProcedure:
+			keyAdminServiceUpdateKeyCoreHandler.ServeHTTP(w, r)
+		case KeyAdminServiceRotateKeyProcedure:
+			keyAdminServiceRotateKeyHandler.ServeHTTP(w, r)
 		case KeyAdminServiceGetKeyProcedure:
 			keyAdminServiceGetKeyHandler.ServeHTTP(w, r)
 		case KeyAdminServiceListKeysProcedure:
 			keyAdminServiceListKeysHandler.ServeHTTP(w, r)
-		case KeyAdminServiceUpdateKeyProcedure:
-			keyAdminServiceUpdateKeyHandler.ServeHTTP(w, r)
-		case KeyAdminServiceCreateKeyRevisionProcedure:
-			keyAdminServiceCreateKeyRevisionHandler.ServeHTTP(w, r)
-		case KeyAdminServiceGetKeyRevisionProcedure:
-			keyAdminServiceGetKeyRevisionHandler.ServeHTTP(w, r)
-		case KeyAdminServiceListKeyRevisionsProcedure:
-			keyAdminServiceListKeyRevisionsHandler.ServeHTTP(w, r)
-		case KeyAdminServiceRevokeKeyRevisionProcedure:
-			keyAdminServiceRevokeKeyRevisionHandler.ServeHTTP(w, r)
+		case KeyAdminServiceRevokeKeyProcedure:
+			keyAdminServiceRevokeKeyHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -305,8 +324,28 @@ func NewKeyAdminServiceHandler(svc KeyAdminServiceHandler, opts ...connect_go.Ha
 // UnimplementedKeyAdminServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedKeyAdminServiceHandler struct{}
 
-func (UnimplementedKeyAdminServiceHandler) CreateKey(context.Context, *connect_go.Request[v1alpha.CreateKeyRequest]) (*connect_go.Response[v1alpha.Key], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.CreateKey is not implemented"))
+func (UnimplementedKeyAdminServiceHandler) CreateKeyCore(context.Context, *connect_go.Request[v1alpha.CreateKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.CreateKeyCore is not implemented"))
+}
+
+func (UnimplementedKeyAdminServiceHandler) GetKeyCore(context.Context, *connect_go.Request[v1alpha.GetKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.GetKeyCore is not implemented"))
+}
+
+func (UnimplementedKeyAdminServiceHandler) ListKeyCores(context.Context, *connect_go.Request[v1alpha.ListKeyCoresRequest]) (*connect_go.Response[v1alpha.ListKeyCoresResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.ListKeyCores is not implemented"))
+}
+
+func (UnimplementedKeyAdminServiceHandler) ListKeyCoreKeys(context.Context, *connect_go.Request[v1alpha.ListKeyCoreKeysRequest]) (*connect_go.Response[v1alpha.ListKeyCoreKeysResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.ListKeyCoreKeys is not implemented"))
+}
+
+func (UnimplementedKeyAdminServiceHandler) UpdateKeyCore(context.Context, *connect_go.Request[v1alpha.UpdateKeyCoreRequest]) (*connect_go.Response[v1alpha.KeyCore], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.UpdateKeyCore is not implemented"))
+}
+
+func (UnimplementedKeyAdminServiceHandler) RotateKey(context.Context, *connect_go.Request[v1alpha.RotateKeyRequest]) (*connect_go.Response[v1alpha.Key], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.RotateKey is not implemented"))
 }
 
 func (UnimplementedKeyAdminServiceHandler) GetKey(context.Context, *connect_go.Request[v1alpha.GetKeyRequest]) (*connect_go.Response[v1alpha.Key], error) {
@@ -317,22 +356,6 @@ func (UnimplementedKeyAdminServiceHandler) ListKeys(context.Context, *connect_go
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.ListKeys is not implemented"))
 }
 
-func (UnimplementedKeyAdminServiceHandler) UpdateKey(context.Context, *connect_go.Request[v1alpha.UpdateKeyRequest]) (*connect_go.Response[v1alpha.Key], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.UpdateKey is not implemented"))
-}
-
-func (UnimplementedKeyAdminServiceHandler) CreateKeyRevision(context.Context, *connect_go.Request[v1alpha.CreateKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.CreateKeyRevision is not implemented"))
-}
-
-func (UnimplementedKeyAdminServiceHandler) GetKeyRevision(context.Context, *connect_go.Request[v1alpha.GetKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.GetKeyRevision is not implemented"))
-}
-
-func (UnimplementedKeyAdminServiceHandler) ListKeyRevisions(context.Context, *connect_go.Request[v1alpha.ListKeyRevisionsRequest]) (*connect_go.Response[v1alpha.ListKeyRevisionsResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.ListKeyRevisions is not implemented"))
-}
-
-func (UnimplementedKeyAdminServiceHandler) RevokeKeyRevision(context.Context, *connect_go.Request[v1alpha.RevokeKeyRevisionRequest]) (*connect_go.Response[v1alpha.KeyRevision], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.RevokeKeyRevision is not implemented"))
+func (UnimplementedKeyAdminServiceHandler) RevokeKey(context.Context, *connect_go.Request[v1alpha.RevokeKeyRequest]) (*connect_go.Response[v1alpha.Key], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.KeyAdminService.RevokeKey is not implemented"))
 }

@@ -33,43 +33,43 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	KeyAdminService_CreateKey_FullMethodName         = "/blocky.authz.admin.v1alpha.KeyAdminService/CreateKey"
-	KeyAdminService_GetKey_FullMethodName            = "/blocky.authz.admin.v1alpha.KeyAdminService/GetKey"
-	KeyAdminService_ListKeys_FullMethodName          = "/blocky.authz.admin.v1alpha.KeyAdminService/ListKeys"
-	KeyAdminService_UpdateKey_FullMethodName         = "/blocky.authz.admin.v1alpha.KeyAdminService/UpdateKey"
-	KeyAdminService_CreateKeyRevision_FullMethodName = "/blocky.authz.admin.v1alpha.KeyAdminService/CreateKeyRevision"
-	KeyAdminService_GetKeyRevision_FullMethodName    = "/blocky.authz.admin.v1alpha.KeyAdminService/GetKeyRevision"
-	KeyAdminService_ListKeyRevisions_FullMethodName  = "/blocky.authz.admin.v1alpha.KeyAdminService/ListKeyRevisions"
-	KeyAdminService_RevokeKeyRevision_FullMethodName = "/blocky.authz.admin.v1alpha.KeyAdminService/RevokeKeyRevision"
+	KeyAdminService_CreateKeyCore_FullMethodName   = "/blocky.authz.admin.v1alpha.KeyAdminService/CreateKeyCore"
+	KeyAdminService_GetKeyCore_FullMethodName      = "/blocky.authz.admin.v1alpha.KeyAdminService/GetKeyCore"
+	KeyAdminService_ListKeyCores_FullMethodName    = "/blocky.authz.admin.v1alpha.KeyAdminService/ListKeyCores"
+	KeyAdminService_ListKeyCoreKeys_FullMethodName = "/blocky.authz.admin.v1alpha.KeyAdminService/ListKeyCoreKeys"
+	KeyAdminService_UpdateKeyCore_FullMethodName   = "/blocky.authz.admin.v1alpha.KeyAdminService/UpdateKeyCore"
+	KeyAdminService_RotateKey_FullMethodName       = "/blocky.authz.admin.v1alpha.KeyAdminService/RotateKey"
+	KeyAdminService_GetKey_FullMethodName          = "/blocky.authz.admin.v1alpha.KeyAdminService/GetKey"
+	KeyAdminService_ListKeys_FullMethodName        = "/blocky.authz.admin.v1alpha.KeyAdminService/ListKeys"
+	KeyAdminService_RevokeKey_FullMethodName       = "/blocky.authz.admin.v1alpha.KeyAdminService/RevokeKey"
 )
 
 // KeyAdminServiceClient is the client API for KeyAdminService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type KeyAdminServiceClient interface {
-	// CreateKey creates a new authorization key.
+	// CreateKeyCore creates a new authorization key.
 	// New key is neither active nor used in a set.
-	CreateKey(ctx context.Context, in *CreateKeyRequest, opts ...grpc.CallOption) (*Key, error)
-	// GetKey returns the specified authorization key.
-	// The name of the key may be used as:
-	// 'projects/{project}/keys/default' to get the default key for the project.
+	CreateKeyCore(ctx context.Context, in *CreateKeyCoreRequest, opts ...grpc.CallOption) (*KeyCore, error)
+	// GetKeyCore returns the specified authorization key.
+	GetKeyCore(ctx context.Context, in *GetKeyCoreRequest, opts ...grpc.CallOption) (*KeyCore, error)
+	// ListKeyCores lists authorization keys that matches given request.
+	ListKeyCores(ctx context.Context, in *ListKeyCoresRequest, opts ...grpc.CallOption) (*ListKeyCoresResponse, error)
+	// ListKeyCoreKeys lists authorization keys that matches given request.
+	ListKeyCoreKeys(ctx context.Context, in *ListKeyCoreKeysRequest, opts ...grpc.CallOption) (*ListKeyCoreKeysResponse, error)
+	// UpdateKeyCore updates the specified authorization key.
+	UpdateKeyCore(ctx context.Context, in *UpdateKeyCoreRequest, opts ...grpc.CallOption) (*KeyCore, error)
+	// Creates a new key revision and rotates the key.
+	RotateKey(ctx context.Context, in *RotateKeyRequest, opts ...grpc.CallOption) (*Key, error)
+	// GetKey returns the specified key revision.
 	GetKey(ctx context.Context, in *GetKeyRequest, opts ...grpc.CallOption) (*Key, error)
 	// ListKeys lists authorization keys that matches given request.
 	ListKeys(ctx context.Context, in *ListKeysRequest, opts ...grpc.CallOption) (*ListKeysResponse, error)
-	// UpdateKey updates the specified authorization key.
-	UpdateKey(ctx context.Context, in *UpdateKeyRequest, opts ...grpc.CallOption) (*Key, error)
-	// Creates a new key revision and rotates the key.
-	CreateKeyRevision(ctx context.Context, in *CreateKeyRevisionRequest, opts ...grpc.CallOption) (*KeyRevision, error)
-	// GetKeyRevision returns the specified key revision.
-	GetKeyRevision(ctx context.Context, in *GetKeyRevisionRequest, opts ...grpc.CallOption) (*KeyRevision, error)
-	// ListKeyRevisions lists authorization key revisions that matches given request.
-	// The key revisions are derived from the parent key.
-	ListKeyRevisions(ctx context.Context, in *ListKeyRevisionsRequest, opts ...grpc.CallOption) (*ListKeyRevisionsResponse, error)
-	// RevokeKeyRevision revokes an authorization key revision.
+	// RevokeKey revokes an authorization key revision.
 	// Once revoked the key revision is no longer valid for signing and verification.
 	// If revoked key was the only active signing key, the system will not accept
 	// any new requests until a new key is created and activated.
-	RevokeKeyRevision(ctx context.Context, in *RevokeKeyRevisionRequest, opts ...grpc.CallOption) (*KeyRevision, error)
+	RevokeKey(ctx context.Context, in *RevokeKeyRequest, opts ...grpc.CallOption) (*Key, error)
 }
 
 type keyAdminServiceClient struct {
@@ -80,9 +80,54 @@ func NewKeyAdminServiceClient(cc grpc.ClientConnInterface) KeyAdminServiceClient
 	return &keyAdminServiceClient{cc}
 }
 
-func (c *keyAdminServiceClient) CreateKey(ctx context.Context, in *CreateKeyRequest, opts ...grpc.CallOption) (*Key, error) {
+func (c *keyAdminServiceClient) CreateKeyCore(ctx context.Context, in *CreateKeyCoreRequest, opts ...grpc.CallOption) (*KeyCore, error) {
+	out := new(KeyCore)
+	err := c.cc.Invoke(ctx, KeyAdminService_CreateKeyCore_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keyAdminServiceClient) GetKeyCore(ctx context.Context, in *GetKeyCoreRequest, opts ...grpc.CallOption) (*KeyCore, error) {
+	out := new(KeyCore)
+	err := c.cc.Invoke(ctx, KeyAdminService_GetKeyCore_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keyAdminServiceClient) ListKeyCores(ctx context.Context, in *ListKeyCoresRequest, opts ...grpc.CallOption) (*ListKeyCoresResponse, error) {
+	out := new(ListKeyCoresResponse)
+	err := c.cc.Invoke(ctx, KeyAdminService_ListKeyCores_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keyAdminServiceClient) ListKeyCoreKeys(ctx context.Context, in *ListKeyCoreKeysRequest, opts ...grpc.CallOption) (*ListKeyCoreKeysResponse, error) {
+	out := new(ListKeyCoreKeysResponse)
+	err := c.cc.Invoke(ctx, KeyAdminService_ListKeyCoreKeys_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keyAdminServiceClient) UpdateKeyCore(ctx context.Context, in *UpdateKeyCoreRequest, opts ...grpc.CallOption) (*KeyCore, error) {
+	out := new(KeyCore)
+	err := c.cc.Invoke(ctx, KeyAdminService_UpdateKeyCore_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keyAdminServiceClient) RotateKey(ctx context.Context, in *RotateKeyRequest, opts ...grpc.CallOption) (*Key, error) {
 	out := new(Key)
-	err := c.cc.Invoke(ctx, KeyAdminService_CreateKey_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, KeyAdminService_RotateKey_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -107,45 +152,9 @@ func (c *keyAdminServiceClient) ListKeys(ctx context.Context, in *ListKeysReques
 	return out, nil
 }
 
-func (c *keyAdminServiceClient) UpdateKey(ctx context.Context, in *UpdateKeyRequest, opts ...grpc.CallOption) (*Key, error) {
+func (c *keyAdminServiceClient) RevokeKey(ctx context.Context, in *RevokeKeyRequest, opts ...grpc.CallOption) (*Key, error) {
 	out := new(Key)
-	err := c.cc.Invoke(ctx, KeyAdminService_UpdateKey_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyAdminServiceClient) CreateKeyRevision(ctx context.Context, in *CreateKeyRevisionRequest, opts ...grpc.CallOption) (*KeyRevision, error) {
-	out := new(KeyRevision)
-	err := c.cc.Invoke(ctx, KeyAdminService_CreateKeyRevision_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyAdminServiceClient) GetKeyRevision(ctx context.Context, in *GetKeyRevisionRequest, opts ...grpc.CallOption) (*KeyRevision, error) {
-	out := new(KeyRevision)
-	err := c.cc.Invoke(ctx, KeyAdminService_GetKeyRevision_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyAdminServiceClient) ListKeyRevisions(ctx context.Context, in *ListKeyRevisionsRequest, opts ...grpc.CallOption) (*ListKeyRevisionsResponse, error) {
-	out := new(ListKeyRevisionsResponse)
-	err := c.cc.Invoke(ctx, KeyAdminService_ListKeyRevisions_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyAdminServiceClient) RevokeKeyRevision(ctx context.Context, in *RevokeKeyRevisionRequest, opts ...grpc.CallOption) (*KeyRevision, error) {
-	out := new(KeyRevision)
-	err := c.cc.Invoke(ctx, KeyAdminService_RevokeKeyRevision_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, KeyAdminService_RevokeKey_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,29 +165,28 @@ func (c *keyAdminServiceClient) RevokeKeyRevision(ctx context.Context, in *Revok
 // All implementations must embed UnimplementedKeyAdminServiceServer
 // for forward compatibility
 type KeyAdminServiceServer interface {
-	// CreateKey creates a new authorization key.
+	// CreateKeyCore creates a new authorization key.
 	// New key is neither active nor used in a set.
-	CreateKey(context.Context, *CreateKeyRequest) (*Key, error)
-	// GetKey returns the specified authorization key.
-	// The name of the key may be used as:
-	// 'projects/{project}/keys/default' to get the default key for the project.
+	CreateKeyCore(context.Context, *CreateKeyCoreRequest) (*KeyCore, error)
+	// GetKeyCore returns the specified authorization key.
+	GetKeyCore(context.Context, *GetKeyCoreRequest) (*KeyCore, error)
+	// ListKeyCores lists authorization keys that matches given request.
+	ListKeyCores(context.Context, *ListKeyCoresRequest) (*ListKeyCoresResponse, error)
+	// ListKeyCoreKeys lists authorization keys that matches given request.
+	ListKeyCoreKeys(context.Context, *ListKeyCoreKeysRequest) (*ListKeyCoreKeysResponse, error)
+	// UpdateKeyCore updates the specified authorization key.
+	UpdateKeyCore(context.Context, *UpdateKeyCoreRequest) (*KeyCore, error)
+	// Creates a new key revision and rotates the key.
+	RotateKey(context.Context, *RotateKeyRequest) (*Key, error)
+	// GetKey returns the specified key revision.
 	GetKey(context.Context, *GetKeyRequest) (*Key, error)
 	// ListKeys lists authorization keys that matches given request.
 	ListKeys(context.Context, *ListKeysRequest) (*ListKeysResponse, error)
-	// UpdateKey updates the specified authorization key.
-	UpdateKey(context.Context, *UpdateKeyRequest) (*Key, error)
-	// Creates a new key revision and rotates the key.
-	CreateKeyRevision(context.Context, *CreateKeyRevisionRequest) (*KeyRevision, error)
-	// GetKeyRevision returns the specified key revision.
-	GetKeyRevision(context.Context, *GetKeyRevisionRequest) (*KeyRevision, error)
-	// ListKeyRevisions lists authorization key revisions that matches given request.
-	// The key revisions are derived from the parent key.
-	ListKeyRevisions(context.Context, *ListKeyRevisionsRequest) (*ListKeyRevisionsResponse, error)
-	// RevokeKeyRevision revokes an authorization key revision.
+	// RevokeKey revokes an authorization key revision.
 	// Once revoked the key revision is no longer valid for signing and verification.
 	// If revoked key was the only active signing key, the system will not accept
 	// any new requests until a new key is created and activated.
-	RevokeKeyRevision(context.Context, *RevokeKeyRevisionRequest) (*KeyRevision, error)
+	RevokeKey(context.Context, *RevokeKeyRequest) (*Key, error)
 	mustEmbedUnimplementedKeyAdminServiceServer()
 }
 
@@ -186,8 +194,23 @@ type KeyAdminServiceServer interface {
 type UnimplementedKeyAdminServiceServer struct {
 }
 
-func (UnimplementedKeyAdminServiceServer) CreateKey(context.Context, *CreateKeyRequest) (*Key, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateKey not implemented")
+func (UnimplementedKeyAdminServiceServer) CreateKeyCore(context.Context, *CreateKeyCoreRequest) (*KeyCore, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateKeyCore not implemented")
+}
+func (UnimplementedKeyAdminServiceServer) GetKeyCore(context.Context, *GetKeyCoreRequest) (*KeyCore, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKeyCore not implemented")
+}
+func (UnimplementedKeyAdminServiceServer) ListKeyCores(context.Context, *ListKeyCoresRequest) (*ListKeyCoresResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListKeyCores not implemented")
+}
+func (UnimplementedKeyAdminServiceServer) ListKeyCoreKeys(context.Context, *ListKeyCoreKeysRequest) (*ListKeyCoreKeysResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListKeyCoreKeys not implemented")
+}
+func (UnimplementedKeyAdminServiceServer) UpdateKeyCore(context.Context, *UpdateKeyCoreRequest) (*KeyCore, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateKeyCore not implemented")
+}
+func (UnimplementedKeyAdminServiceServer) RotateKey(context.Context, *RotateKeyRequest) (*Key, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RotateKey not implemented")
 }
 func (UnimplementedKeyAdminServiceServer) GetKey(context.Context, *GetKeyRequest) (*Key, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetKey not implemented")
@@ -195,20 +218,8 @@ func (UnimplementedKeyAdminServiceServer) GetKey(context.Context, *GetKeyRequest
 func (UnimplementedKeyAdminServiceServer) ListKeys(context.Context, *ListKeysRequest) (*ListKeysResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListKeys not implemented")
 }
-func (UnimplementedKeyAdminServiceServer) UpdateKey(context.Context, *UpdateKeyRequest) (*Key, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateKey not implemented")
-}
-func (UnimplementedKeyAdminServiceServer) CreateKeyRevision(context.Context, *CreateKeyRevisionRequest) (*KeyRevision, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateKeyRevision not implemented")
-}
-func (UnimplementedKeyAdminServiceServer) GetKeyRevision(context.Context, *GetKeyRevisionRequest) (*KeyRevision, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetKeyRevision not implemented")
-}
-func (UnimplementedKeyAdminServiceServer) ListKeyRevisions(context.Context, *ListKeyRevisionsRequest) (*ListKeyRevisionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListKeyRevisions not implemented")
-}
-func (UnimplementedKeyAdminServiceServer) RevokeKeyRevision(context.Context, *RevokeKeyRevisionRequest) (*KeyRevision, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RevokeKeyRevision not implemented")
+func (UnimplementedKeyAdminServiceServer) RevokeKey(context.Context, *RevokeKeyRequest) (*Key, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeKey not implemented")
 }
 func (UnimplementedKeyAdminServiceServer) mustEmbedUnimplementedKeyAdminServiceServer() {}
 
@@ -223,20 +234,110 @@ func RegisterKeyAdminServiceServer(s grpc.ServiceRegistrar, srv KeyAdminServiceS
 	s.RegisterService(&KeyAdminService_ServiceDesc, srv)
 }
 
-func _KeyAdminService_CreateKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateKeyRequest)
+func _KeyAdminService_CreateKeyCore_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateKeyCoreRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(KeyAdminServiceServer).CreateKey(ctx, in)
+		return srv.(KeyAdminServiceServer).CreateKeyCore(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: KeyAdminService_CreateKey_FullMethodName,
+		FullMethod: KeyAdminService_CreateKeyCore_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyAdminServiceServer).CreateKey(ctx, req.(*CreateKeyRequest))
+		return srv.(KeyAdminServiceServer).CreateKeyCore(ctx, req.(*CreateKeyCoreRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KeyAdminService_GetKeyCore_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetKeyCoreRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeyAdminServiceServer).GetKeyCore(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KeyAdminService_GetKeyCore_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeyAdminServiceServer).GetKeyCore(ctx, req.(*GetKeyCoreRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KeyAdminService_ListKeyCores_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListKeyCoresRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeyAdminServiceServer).ListKeyCores(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KeyAdminService_ListKeyCores_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeyAdminServiceServer).ListKeyCores(ctx, req.(*ListKeyCoresRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KeyAdminService_ListKeyCoreKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListKeyCoreKeysRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeyAdminServiceServer).ListKeyCoreKeys(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KeyAdminService_ListKeyCoreKeys_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeyAdminServiceServer).ListKeyCoreKeys(ctx, req.(*ListKeyCoreKeysRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KeyAdminService_UpdateKeyCore_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateKeyCoreRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeyAdminServiceServer).UpdateKeyCore(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KeyAdminService_UpdateKeyCore_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeyAdminServiceServer).UpdateKeyCore(ctx, req.(*UpdateKeyCoreRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KeyAdminService_RotateKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RotateKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeyAdminServiceServer).RotateKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KeyAdminService_RotateKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeyAdminServiceServer).RotateKey(ctx, req.(*RotateKeyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -277,92 +378,20 @@ func _KeyAdminService_ListKeys_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KeyAdminService_UpdateKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateKeyRequest)
+func _KeyAdminService_RevokeKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeKeyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(KeyAdminServiceServer).UpdateKey(ctx, in)
+		return srv.(KeyAdminServiceServer).RevokeKey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: KeyAdminService_UpdateKey_FullMethodName,
+		FullMethod: KeyAdminService_RevokeKey_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyAdminServiceServer).UpdateKey(ctx, req.(*UpdateKeyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KeyAdminService_CreateKeyRevision_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateKeyRevisionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyAdminServiceServer).CreateKeyRevision(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyAdminService_CreateKeyRevision_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyAdminServiceServer).CreateKeyRevision(ctx, req.(*CreateKeyRevisionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KeyAdminService_GetKeyRevision_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetKeyRevisionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyAdminServiceServer).GetKeyRevision(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyAdminService_GetKeyRevision_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyAdminServiceServer).GetKeyRevision(ctx, req.(*GetKeyRevisionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KeyAdminService_ListKeyRevisions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListKeyRevisionsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyAdminServiceServer).ListKeyRevisions(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyAdminService_ListKeyRevisions_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyAdminServiceServer).ListKeyRevisions(ctx, req.(*ListKeyRevisionsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KeyAdminService_RevokeKeyRevision_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RevokeKeyRevisionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyAdminServiceServer).RevokeKeyRevision(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyAdminService_RevokeKeyRevision_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyAdminServiceServer).RevokeKeyRevision(ctx, req.(*RevokeKeyRevisionRequest))
+		return srv.(KeyAdminServiceServer).RevokeKey(ctx, req.(*RevokeKeyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -375,8 +404,28 @@ var KeyAdminService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*KeyAdminServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateKey",
-			Handler:    _KeyAdminService_CreateKey_Handler,
+			MethodName: "CreateKeyCore",
+			Handler:    _KeyAdminService_CreateKeyCore_Handler,
+		},
+		{
+			MethodName: "GetKeyCore",
+			Handler:    _KeyAdminService_GetKeyCore_Handler,
+		},
+		{
+			MethodName: "ListKeyCores",
+			Handler:    _KeyAdminService_ListKeyCores_Handler,
+		},
+		{
+			MethodName: "ListKeyCoreKeys",
+			Handler:    _KeyAdminService_ListKeyCoreKeys_Handler,
+		},
+		{
+			MethodName: "UpdateKeyCore",
+			Handler:    _KeyAdminService_UpdateKeyCore_Handler,
+		},
+		{
+			MethodName: "RotateKey",
+			Handler:    _KeyAdminService_RotateKey_Handler,
 		},
 		{
 			MethodName: "GetKey",
@@ -387,24 +436,8 @@ var KeyAdminService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _KeyAdminService_ListKeys_Handler,
 		},
 		{
-			MethodName: "UpdateKey",
-			Handler:    _KeyAdminService_UpdateKey_Handler,
-		},
-		{
-			MethodName: "CreateKeyRevision",
-			Handler:    _KeyAdminService_CreateKeyRevision_Handler,
-		},
-		{
-			MethodName: "GetKeyRevision",
-			Handler:    _KeyAdminService_GetKeyRevision_Handler,
-		},
-		{
-			MethodName: "ListKeyRevisions",
-			Handler:    _KeyAdminService_ListKeyRevisions_Handler,
-		},
-		{
-			MethodName: "RevokeKeyRevision",
-			Handler:    _KeyAdminService_RevokeKeyRevision_Handler,
+			MethodName: "RevokeKey",
+			Handler:    _KeyAdminService_RevokeKey_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

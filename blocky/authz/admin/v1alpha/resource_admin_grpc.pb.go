@@ -34,18 +34,19 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ResourceAdminService_CreateResourceManager_FullMethodName    = "/blocky.authz.admin.v1alpha.ResourceAdminService/CreateResourceManager"
-	ResourceAdminService_GetResourceManager_FullMethodName       = "/blocky.authz.admin.v1alpha.ResourceAdminService/GetResourceManager"
-	ResourceAdminService_ListResourceManagers_FullMethodName     = "/blocky.authz.admin.v1alpha.ResourceAdminService/ListResourceManagers"
-	ResourceAdminService_UpdateResourceManager_FullMethodName    = "/blocky.authz.admin.v1alpha.ResourceAdminService/UpdateResourceManager"
-	ResourceAdminService_DeleteResourceManager_FullMethodName    = "/blocky.authz.admin.v1alpha.ResourceAdminService/DeleteResourceManager"
-	ResourceAdminService_AliasResourceManager_FullMethodName     = "/blocky.authz.admin.v1alpha.ResourceAdminService/AliasResourceManager"
-	ResourceAdminService_CreateResourcePermission_FullMethodName = "/blocky.authz.admin.v1alpha.ResourceAdminService/CreateResourcePermission"
-	ResourceAdminService_ListResourcePermission_FullMethodName   = "/blocky.authz.admin.v1alpha.ResourceAdminService/ListResourcePermission"
-	ResourceAdminService_GetResourcePermission_FullMethodName    = "/blocky.authz.admin.v1alpha.ResourceAdminService/GetResourcePermission"
-	ResourceAdminService_UpdateResourcePermission_FullMethodName = "/blocky.authz.admin.v1alpha.ResourceAdminService/UpdateResourcePermission"
-	ResourceAdminService_DeleteResourcePermission_FullMethodName = "/blocky.authz.admin.v1alpha.ResourceAdminService/DeleteResourcePermission"
-	ResourceAdminService_AliasResourcePermission_FullMethodName  = "/blocky.authz.admin.v1alpha.ResourceAdminService/AliasResourcePermission"
+	ResourceAdminService_CreateResourceManager_FullMethodName              = "/blocky.authz.admin.v1alpha.ResourceAdminService/CreateResourceManager"
+	ResourceAdminService_GetResourceManager_FullMethodName                 = "/blocky.authz.admin.v1alpha.ResourceAdminService/GetResourceManager"
+	ResourceAdminService_ListResourceManagers_FullMethodName               = "/blocky.authz.admin.v1alpha.ResourceAdminService/ListResourceManagers"
+	ResourceAdminService_UpdateResourceManager_FullMethodName              = "/blocky.authz.admin.v1alpha.ResourceAdminService/UpdateResourceManager"
+	ResourceAdminService_DeleteResourceManager_FullMethodName              = "/blocky.authz.admin.v1alpha.ResourceAdminService/DeleteResourceManager"
+	ResourceAdminService_AliasResourceManager_FullMethodName               = "/blocky.authz.admin.v1alpha.ResourceAdminService/AliasResourceManager"
+	ResourceAdminService_CreateResourcePermission_FullMethodName           = "/blocky.authz.admin.v1alpha.ResourceAdminService/CreateResourcePermission"
+	ResourceAdminService_ListResourcePermission_FullMethodName             = "/blocky.authz.admin.v1alpha.ResourceAdminService/ListResourcePermission"
+	ResourceAdminService_GetResourcePermission_FullMethodName              = "/blocky.authz.admin.v1alpha.ResourceAdminService/GetResourcePermission"
+	ResourceAdminService_UpdateResourcePermission_FullMethodName           = "/blocky.authz.admin.v1alpha.ResourceAdminService/UpdateResourcePermission"
+	ResourceAdminService_DeleteResourcePermission_FullMethodName           = "/blocky.authz.admin.v1alpha.ResourceAdminService/DeleteResourcePermission"
+	ResourceAdminService_AliasResourcePermission_FullMethodName            = "/blocky.authz.admin.v1alpha.ResourceAdminService/AliasResourcePermission"
+	ResourceAdminService_ListResourcePermissionUserConsents_FullMethodName = "/blocky.authz.admin.v1alpha.ResourceAdminService/ListResourcePermissionUserConsents"
 )
 
 // ResourceAdminServiceClient is the client API for ResourceAdminService service.
@@ -80,6 +81,8 @@ type ResourceAdminServiceClient interface {
 	// If the alias already exists, the former aliased resource permission will have
 	// no alias.
 	AliasResourcePermission(ctx context.Context, in *AliasResourcePermissionRequest, opts ...grpc.CallOption) (*ResourcePermission, error)
+	// Lists user consents associated with given resource permission.
+	ListResourcePermissionUserConsents(ctx context.Context, in *ListResourcePermissionUserConsentsRequest, opts ...grpc.CallOption) (*ListResourcePermissionUserConsentsResponse, error)
 }
 
 type resourceAdminServiceClient struct {
@@ -198,6 +201,15 @@ func (c *resourceAdminServiceClient) AliasResourcePermission(ctx context.Context
 	return out, nil
 }
 
+func (c *resourceAdminServiceClient) ListResourcePermissionUserConsents(ctx context.Context, in *ListResourcePermissionUserConsentsRequest, opts ...grpc.CallOption) (*ListResourcePermissionUserConsentsResponse, error) {
+	out := new(ListResourcePermissionUserConsentsResponse)
+	err := c.cc.Invoke(ctx, ResourceAdminService_ListResourcePermissionUserConsents_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ResourceAdminServiceServer is the server API for ResourceAdminService service.
 // All implementations must embed UnimplementedResourceAdminServiceServer
 // for forward compatibility
@@ -230,6 +242,8 @@ type ResourceAdminServiceServer interface {
 	// If the alias already exists, the former aliased resource permission will have
 	// no alias.
 	AliasResourcePermission(context.Context, *AliasResourcePermissionRequest) (*ResourcePermission, error)
+	// Lists user consents associated with given resource permission.
+	ListResourcePermissionUserConsents(context.Context, *ListResourcePermissionUserConsentsRequest) (*ListResourcePermissionUserConsentsResponse, error)
 	mustEmbedUnimplementedResourceAdminServiceServer()
 }
 
@@ -272,6 +286,9 @@ func (UnimplementedResourceAdminServiceServer) DeleteResourcePermission(context.
 }
 func (UnimplementedResourceAdminServiceServer) AliasResourcePermission(context.Context, *AliasResourcePermissionRequest) (*ResourcePermission, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AliasResourcePermission not implemented")
+}
+func (UnimplementedResourceAdminServiceServer) ListResourcePermissionUserConsents(context.Context, *ListResourcePermissionUserConsentsRequest) (*ListResourcePermissionUserConsentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListResourcePermissionUserConsents not implemented")
 }
 func (UnimplementedResourceAdminServiceServer) mustEmbedUnimplementedResourceAdminServiceServer() {}
 
@@ -502,6 +519,24 @@ func _ResourceAdminService_AliasResourcePermission_Handler(srv interface{}, ctx 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ResourceAdminService_ListResourcePermissionUserConsents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListResourcePermissionUserConsentsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceAdminServiceServer).ListResourcePermissionUserConsents(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ResourceAdminService_ListResourcePermissionUserConsents_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceAdminServiceServer).ListResourcePermissionUserConsents(ctx, req.(*ListResourcePermissionUserConsentsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ResourceAdminService_ServiceDesc is the grpc.ServiceDesc for ResourceAdminService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -556,6 +591,10 @@ var ResourceAdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AliasResourcePermission",
 			Handler:    _ResourceAdminService_AliasResourcePermission_Handler,
+		},
+		{
+			MethodName: "ListResourcePermissionUserConsents",
+			Handler:    _ResourceAdminService_ListResourcePermissionUserConsents_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

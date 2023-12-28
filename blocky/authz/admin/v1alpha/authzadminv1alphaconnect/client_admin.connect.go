@@ -63,9 +63,12 @@ const (
 	// ClientAdminServiceDeleteClientProcedure is the fully-qualified name of the ClientAdminService's
 	// DeleteClient RPC.
 	ClientAdminServiceDeleteClientProcedure = "/blocky.authz.admin.v1alpha.ClientAdminService/DeleteClient"
-	// ClientAdminServiceShowClientCredentialsProcedure is the fully-qualified name of the
-	// ClientAdminService's ShowClientCredentials RPC.
-	ClientAdminServiceShowClientCredentialsProcedure = "/blocky.authz.admin.v1alpha.ClientAdminService/ShowClientCredentials"
+	// ClientAdminServiceCreateClientResourcePermissionProcedure is the fully-qualified name of the
+	// ClientAdminService's CreateClientResourcePermission RPC.
+	ClientAdminServiceCreateClientResourcePermissionProcedure = "/blocky.authz.admin.v1alpha.ClientAdminService/CreateClientResourcePermission"
+	// ClientAdminServiceListClientResourcePermissionsProcedure is the fully-qualified name of the
+	// ClientAdminService's ListClientResourcePermissions RPC.
+	ClientAdminServiceListClientResourcePermissionsProcedure = "/blocky.authz.admin.v1alpha.ClientAdminService/ListClientResourcePermissions"
 )
 
 // ClientAdminServiceClient is a client for the blocky.authz.admin.v1alpha.ClientAdminService
@@ -83,8 +86,10 @@ type ClientAdminServiceClient interface {
 	UpdateClient(context.Context, *connect_go.Request[v1alpha.UpdateClientRequest]) (*connect_go.Response[v1alpha.Client], error)
 	// Deletes an authorization client.
 	DeleteClient(context.Context, *connect_go.Request[v1alpha.DeleteClientRequest]) (*connect_go.Response[emptypb.Empty], error)
-	// Shows the credentials for an authorization client.
-	ShowClientCredentials(context.Context, *connect_go.Request[v1alpha.ShowClientCredentialsRequest]) (*connect_go.Response[v1alpha.ClientCredentials], error)
+	// CreateClientResourcePermission adds a client the permission to use given resource,
+	// defined by the resource permission.
+	CreateClientResourcePermission(context.Context, *connect_go.Request[v1alpha.CreateClientResourcePermissionRequest]) (*connect_go.Response[v1alpha.ClientResourcePermission], error)
+	ListClientResourcePermissions(context.Context, *connect_go.Request[v1alpha.ListClientResourcePermissionsRequest]) (*connect_go.Response[v1alpha.ListClientResourcePermissionsResponse], error)
 }
 
 // NewClientAdminServiceClient constructs a client for the
@@ -123,9 +128,14 @@ func NewClientAdminServiceClient(httpClient connect_go.HTTPClient, baseURL strin
 			baseURL+ClientAdminServiceDeleteClientProcedure,
 			opts...,
 		),
-		showClientCredentials: connect_go.NewClient[v1alpha.ShowClientCredentialsRequest, v1alpha.ClientCredentials](
+		createClientResourcePermission: connect_go.NewClient[v1alpha.CreateClientResourcePermissionRequest, v1alpha.ClientResourcePermission](
 			httpClient,
-			baseURL+ClientAdminServiceShowClientCredentialsProcedure,
+			baseURL+ClientAdminServiceCreateClientResourcePermissionProcedure,
+			opts...,
+		),
+		listClientResourcePermissions: connect_go.NewClient[v1alpha.ListClientResourcePermissionsRequest, v1alpha.ListClientResourcePermissionsResponse](
+			httpClient,
+			baseURL+ClientAdminServiceListClientResourcePermissionsProcedure,
 			opts...,
 		),
 	}
@@ -133,12 +143,13 @@ func NewClientAdminServiceClient(httpClient connect_go.HTTPClient, baseURL strin
 
 // clientAdminServiceClient implements ClientAdminServiceClient.
 type clientAdminServiceClient struct {
-	createClient          *connect_go.Client[v1alpha.CreateClientRequest, v1alpha.Client]
-	listClient            *connect_go.Client[v1alpha.ListClientRequest, v1alpha.ListClientResponse]
-	getClient             *connect_go.Client[v1alpha.GetClientRequest, v1alpha.Client]
-	updateClient          *connect_go.Client[v1alpha.UpdateClientRequest, v1alpha.Client]
-	deleteClient          *connect_go.Client[v1alpha.DeleteClientRequest, emptypb.Empty]
-	showClientCredentials *connect_go.Client[v1alpha.ShowClientCredentialsRequest, v1alpha.ClientCredentials]
+	createClient                   *connect_go.Client[v1alpha.CreateClientRequest, v1alpha.Client]
+	listClient                     *connect_go.Client[v1alpha.ListClientRequest, v1alpha.ListClientResponse]
+	getClient                      *connect_go.Client[v1alpha.GetClientRequest, v1alpha.Client]
+	updateClient                   *connect_go.Client[v1alpha.UpdateClientRequest, v1alpha.Client]
+	deleteClient                   *connect_go.Client[v1alpha.DeleteClientRequest, emptypb.Empty]
+	createClientResourcePermission *connect_go.Client[v1alpha.CreateClientResourcePermissionRequest, v1alpha.ClientResourcePermission]
+	listClientResourcePermissions  *connect_go.Client[v1alpha.ListClientResourcePermissionsRequest, v1alpha.ListClientResourcePermissionsResponse]
 }
 
 // CreateClient calls blocky.authz.admin.v1alpha.ClientAdminService.CreateClient.
@@ -166,9 +177,16 @@ func (c *clientAdminServiceClient) DeleteClient(ctx context.Context, req *connec
 	return c.deleteClient.CallUnary(ctx, req)
 }
 
-// ShowClientCredentials calls blocky.authz.admin.v1alpha.ClientAdminService.ShowClientCredentials.
-func (c *clientAdminServiceClient) ShowClientCredentials(ctx context.Context, req *connect_go.Request[v1alpha.ShowClientCredentialsRequest]) (*connect_go.Response[v1alpha.ClientCredentials], error) {
-	return c.showClientCredentials.CallUnary(ctx, req)
+// CreateClientResourcePermission calls
+// blocky.authz.admin.v1alpha.ClientAdminService.CreateClientResourcePermission.
+func (c *clientAdminServiceClient) CreateClientResourcePermission(ctx context.Context, req *connect_go.Request[v1alpha.CreateClientResourcePermissionRequest]) (*connect_go.Response[v1alpha.ClientResourcePermission], error) {
+	return c.createClientResourcePermission.CallUnary(ctx, req)
+}
+
+// ListClientResourcePermissions calls
+// blocky.authz.admin.v1alpha.ClientAdminService.ListClientResourcePermissions.
+func (c *clientAdminServiceClient) ListClientResourcePermissions(ctx context.Context, req *connect_go.Request[v1alpha.ListClientResourcePermissionsRequest]) (*connect_go.Response[v1alpha.ListClientResourcePermissionsResponse], error) {
+	return c.listClientResourcePermissions.CallUnary(ctx, req)
 }
 
 // ClientAdminServiceHandler is an implementation of the
@@ -186,8 +204,10 @@ type ClientAdminServiceHandler interface {
 	UpdateClient(context.Context, *connect_go.Request[v1alpha.UpdateClientRequest]) (*connect_go.Response[v1alpha.Client], error)
 	// Deletes an authorization client.
 	DeleteClient(context.Context, *connect_go.Request[v1alpha.DeleteClientRequest]) (*connect_go.Response[emptypb.Empty], error)
-	// Shows the credentials for an authorization client.
-	ShowClientCredentials(context.Context, *connect_go.Request[v1alpha.ShowClientCredentialsRequest]) (*connect_go.Response[v1alpha.ClientCredentials], error)
+	// CreateClientResourcePermission adds a client the permission to use given resource,
+	// defined by the resource permission.
+	CreateClientResourcePermission(context.Context, *connect_go.Request[v1alpha.CreateClientResourcePermissionRequest]) (*connect_go.Response[v1alpha.ClientResourcePermission], error)
+	ListClientResourcePermissions(context.Context, *connect_go.Request[v1alpha.ListClientResourcePermissionsRequest]) (*connect_go.Response[v1alpha.ListClientResourcePermissionsResponse], error)
 }
 
 // NewClientAdminServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -221,9 +241,14 @@ func NewClientAdminServiceHandler(svc ClientAdminServiceHandler, opts ...connect
 		svc.DeleteClient,
 		opts...,
 	)
-	clientAdminServiceShowClientCredentialsHandler := connect_go.NewUnaryHandler(
-		ClientAdminServiceShowClientCredentialsProcedure,
-		svc.ShowClientCredentials,
+	clientAdminServiceCreateClientResourcePermissionHandler := connect_go.NewUnaryHandler(
+		ClientAdminServiceCreateClientResourcePermissionProcedure,
+		svc.CreateClientResourcePermission,
+		opts...,
+	)
+	clientAdminServiceListClientResourcePermissionsHandler := connect_go.NewUnaryHandler(
+		ClientAdminServiceListClientResourcePermissionsProcedure,
+		svc.ListClientResourcePermissions,
 		opts...,
 	)
 	return "/blocky.authz.admin.v1alpha.ClientAdminService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -238,8 +263,10 @@ func NewClientAdminServiceHandler(svc ClientAdminServiceHandler, opts ...connect
 			clientAdminServiceUpdateClientHandler.ServeHTTP(w, r)
 		case ClientAdminServiceDeleteClientProcedure:
 			clientAdminServiceDeleteClientHandler.ServeHTTP(w, r)
-		case ClientAdminServiceShowClientCredentialsProcedure:
-			clientAdminServiceShowClientCredentialsHandler.ServeHTTP(w, r)
+		case ClientAdminServiceCreateClientResourcePermissionProcedure:
+			clientAdminServiceCreateClientResourcePermissionHandler.ServeHTTP(w, r)
+		case ClientAdminServiceListClientResourcePermissionsProcedure:
+			clientAdminServiceListClientResourcePermissionsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -269,6 +296,10 @@ func (UnimplementedClientAdminServiceHandler) DeleteClient(context.Context, *con
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.ClientAdminService.DeleteClient is not implemented"))
 }
 
-func (UnimplementedClientAdminServiceHandler) ShowClientCredentials(context.Context, *connect_go.Request[v1alpha.ShowClientCredentialsRequest]) (*connect_go.Response[v1alpha.ClientCredentials], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.ClientAdminService.ShowClientCredentials is not implemented"))
+func (UnimplementedClientAdminServiceHandler) CreateClientResourcePermission(context.Context, *connect_go.Request[v1alpha.CreateClientResourcePermissionRequest]) (*connect_go.Response[v1alpha.ClientResourcePermission], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.ClientAdminService.CreateClientResourcePermission is not implemented"))
+}
+
+func (UnimplementedClientAdminServiceHandler) ListClientResourcePermissions(context.Context, *connect_go.Request[v1alpha.ListClientResourcePermissionsRequest]) (*connect_go.Response[v1alpha.ListClientResourcePermissionsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("blocky.authz.admin.v1alpha.ClientAdminService.ListClientResourcePermissions is not implemented"))
 }
