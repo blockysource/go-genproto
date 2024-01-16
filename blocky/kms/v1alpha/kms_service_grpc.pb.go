@@ -49,10 +49,10 @@ const (
 	KmsService_ListKeyRingPublicKeys_FullMethodName   = "/blocky.kms.v1alpha.KmsService/ListKeyRingPublicKeys"
 	KmsService_UpdateKeyRing_FullMethodName           = "/blocky.kms.v1alpha.KmsService/UpdateKeyRing"
 	KmsService_DeleteKeyRing_FullMethodName           = "/blocky.kms.v1alpha.KmsService/DeleteKeyRing"
-	KmsService_SignContent_FullMethodName             = "/blocky.kms.v1alpha.KmsService/SignContent"
-	KmsService_VerifySignedContent_FullMethodName     = "/blocky.kms.v1alpha.KmsService/VerifySignedContent"
 	KmsService_SignBlob_FullMethodName                = "/blocky.kms.v1alpha.KmsService/SignBlob"
 	KmsService_VerifyBlob_FullMethodName              = "/blocky.kms.v1alpha.KmsService/VerifyBlob"
+	KmsService_SignContent_FullMethodName             = "/blocky.kms.v1alpha.KmsService/SignContent"
+	KmsService_VerifySignedContent_FullMethodName     = "/blocky.kms.v1alpha.KmsService/VerifySignedContent"
 	KmsService_EncryptContent_FullMethodName          = "/blocky.kms.v1alpha.KmsService/EncryptContent"
 	KmsService_DecryptContent_FullMethodName          = "/blocky.kms.v1alpha.KmsService/DecryptContent"
 	KmsService_EncryptBlob_FullMethodName             = "/blocky.kms.v1alpha.KmsService/EncryptBlob"
@@ -95,14 +95,14 @@ type KmsServiceClient interface {
 	UpdateKeyRing(ctx context.Context, in *UpdateKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error)
 	// Delete key ring.
 	DeleteKeyRing(ctx context.Context, in *DeleteKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error)
+	// SignBlob signs the given data with the given key.
+	SignBlob(ctx context.Context, in *SignBlobRequest, opts ...grpc.CallOption) (*SignBlobResponse, error)
+	// VerifyBlob verifies the given signature with the given key.
+	VerifyBlob(ctx context.Context, in *VerifyBlobRequest, opts ...grpc.CallOption) (*VerifyBlobResponse, error)
 	// SignContent signs the given data with the given key.
 	SignContent(ctx context.Context, in *SignContentRequest, opts ...grpc.CallOption) (*cryptopb.SignedContent, error)
 	// Verify signed content verifies the given signature with the given key.
 	VerifySignedContent(ctx context.Context, in *VerifySignedContentRequest, opts ...grpc.CallOption) (*VerifySignedContentResponse, error)
-	// SignBlob creates a raw signature for the given input blob.
-	SignBlob(ctx context.Context, in *SignBlobRequest, opts ...grpc.CallOption) (*SignBlobResponse, error)
-	// VerifyBlob verifies if input signature were created for the given input blob.
-	VerifyBlob(ctx context.Context, in *VerifyBlobRequest, opts ...grpc.CallOption) (*VerifyBlobResponse, error)
 	// Encrypts the input content with the given key.
 	EncryptContent(ctx context.Context, in *EncryptContentRequest, opts ...grpc.CallOption) (*EncryptContentResponse, error)
 	// Decrypts the input content with the given key.
@@ -256,24 +256,6 @@ func (c *kmsServiceClient) DeleteKeyRing(ctx context.Context, in *DeleteKeyRingR
 	return out, nil
 }
 
-func (c *kmsServiceClient) SignContent(ctx context.Context, in *SignContentRequest, opts ...grpc.CallOption) (*cryptopb.SignedContent, error) {
-	out := new(cryptopb.SignedContent)
-	err := c.cc.Invoke(ctx, KmsService_SignContent_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *kmsServiceClient) VerifySignedContent(ctx context.Context, in *VerifySignedContentRequest, opts ...grpc.CallOption) (*VerifySignedContentResponse, error) {
-	out := new(VerifySignedContentResponse)
-	err := c.cc.Invoke(ctx, KmsService_VerifySignedContent_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *kmsServiceClient) SignBlob(ctx context.Context, in *SignBlobRequest, opts ...grpc.CallOption) (*SignBlobResponse, error) {
 	out := new(SignBlobResponse)
 	err := c.cc.Invoke(ctx, KmsService_SignBlob_FullMethodName, in, out, opts...)
@@ -286,6 +268,24 @@ func (c *kmsServiceClient) SignBlob(ctx context.Context, in *SignBlobRequest, op
 func (c *kmsServiceClient) VerifyBlob(ctx context.Context, in *VerifyBlobRequest, opts ...grpc.CallOption) (*VerifyBlobResponse, error) {
 	out := new(VerifyBlobResponse)
 	err := c.cc.Invoke(ctx, KmsService_VerifyBlob_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) SignContent(ctx context.Context, in *SignContentRequest, opts ...grpc.CallOption) (*cryptopb.SignedContent, error) {
+	out := new(cryptopb.SignedContent)
+	err := c.cc.Invoke(ctx, KmsService_SignContent_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kmsServiceClient) VerifySignedContent(ctx context.Context, in *VerifySignedContentRequest, opts ...grpc.CallOption) (*VerifySignedContentResponse, error) {
+	out := new(VerifySignedContentResponse)
+	err := c.cc.Invoke(ctx, KmsService_VerifySignedContent_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -364,14 +364,14 @@ type KmsServiceServer interface {
 	UpdateKeyRing(context.Context, *UpdateKeyRingRequest) (*KeyRing, error)
 	// Delete key ring.
 	DeleteKeyRing(context.Context, *DeleteKeyRingRequest) (*KeyRing, error)
+	// SignBlob signs the given data with the given key.
+	SignBlob(context.Context, *SignBlobRequest) (*SignBlobResponse, error)
+	// VerifyBlob verifies the given signature with the given key.
+	VerifyBlob(context.Context, *VerifyBlobRequest) (*VerifyBlobResponse, error)
 	// SignContent signs the given data with the given key.
 	SignContent(context.Context, *SignContentRequest) (*cryptopb.SignedContent, error)
 	// Verify signed content verifies the given signature with the given key.
 	VerifySignedContent(context.Context, *VerifySignedContentRequest) (*VerifySignedContentResponse, error)
-	// SignBlob creates a raw signature for the given input blob.
-	SignBlob(context.Context, *SignBlobRequest) (*SignBlobResponse, error)
-	// VerifyBlob verifies if input signature were created for the given input blob.
-	VerifyBlob(context.Context, *VerifyBlobRequest) (*VerifyBlobResponse, error)
 	// Encrypts the input content with the given key.
 	EncryptContent(context.Context, *EncryptContentRequest) (*EncryptContentResponse, error)
 	// Decrypts the input content with the given key.
@@ -432,17 +432,17 @@ func (UnimplementedKmsServiceServer) UpdateKeyRing(context.Context, *UpdateKeyRi
 func (UnimplementedKmsServiceServer) DeleteKeyRing(context.Context, *DeleteKeyRingRequest) (*KeyRing, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteKeyRing not implemented")
 }
-func (UnimplementedKmsServiceServer) SignContent(context.Context, *SignContentRequest) (*cryptopb.SignedContent, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SignContent not implemented")
-}
-func (UnimplementedKmsServiceServer) VerifySignedContent(context.Context, *VerifySignedContentRequest) (*VerifySignedContentResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method VerifySignedContent not implemented")
-}
 func (UnimplementedKmsServiceServer) SignBlob(context.Context, *SignBlobRequest) (*SignBlobResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignBlob not implemented")
 }
 func (UnimplementedKmsServiceServer) VerifyBlob(context.Context, *VerifyBlobRequest) (*VerifyBlobResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyBlob not implemented")
+}
+func (UnimplementedKmsServiceServer) SignContent(context.Context, *SignContentRequest) (*cryptopb.SignedContent, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SignContent not implemented")
+}
+func (UnimplementedKmsServiceServer) VerifySignedContent(context.Context, *VerifySignedContentRequest) (*VerifySignedContentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifySignedContent not implemented")
 }
 func (UnimplementedKmsServiceServer) EncryptContent(context.Context, *EncryptContentRequest) (*EncryptContentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EncryptContent not implemented")
@@ -739,42 +739,6 @@ func _KmsService_DeleteKeyRing_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KmsService_SignContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SignContentRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KmsServiceServer).SignContent(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KmsService_SignContent_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KmsServiceServer).SignContent(ctx, req.(*SignContentRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KmsService_VerifySignedContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(VerifySignedContentRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KmsServiceServer).VerifySignedContent(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KmsService_VerifySignedContent_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KmsServiceServer).VerifySignedContent(ctx, req.(*VerifySignedContentRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _KmsService_SignBlob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SignBlobRequest)
 	if err := dec(in); err != nil {
@@ -807,6 +771,42 @@ func _KmsService_VerifyBlob_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KmsServiceServer).VerifyBlob(ctx, req.(*VerifyBlobRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_SignContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignContentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).SignContent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_SignContent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).SignContent(ctx, req.(*SignContentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KmsService_VerifySignedContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifySignedContentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KmsServiceServer).VerifySignedContent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KmsService_VerifySignedContent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KmsServiceServer).VerifySignedContent(ctx, req.(*VerifySignedContentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -951,20 +951,20 @@ var KmsService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _KmsService_DeleteKeyRing_Handler,
 		},
 		{
-			MethodName: "SignContent",
-			Handler:    _KmsService_SignContent_Handler,
-		},
-		{
-			MethodName: "VerifySignedContent",
-			Handler:    _KmsService_VerifySignedContent_Handler,
-		},
-		{
 			MethodName: "SignBlob",
 			Handler:    _KmsService_SignBlob_Handler,
 		},
 		{
 			MethodName: "VerifyBlob",
 			Handler:    _KmsService_VerifyBlob_Handler,
+		},
+		{
+			MethodName: "SignContent",
+			Handler:    _KmsService_SignContent_Handler,
+		},
+		{
+			MethodName: "VerifySignedContent",
+			Handler:    _KmsService_VerifySignedContent_Handler,
 		},
 		{
 			MethodName: "EncryptContent",
