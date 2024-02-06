@@ -2,6 +2,8 @@ module github.com/blockysource/go-genproto
 
 go 1.20
 
+
+
 require (
 	github.com/bufbuild/connect-go v1.10.0
 	github.com/google/uuid v1.5.0
