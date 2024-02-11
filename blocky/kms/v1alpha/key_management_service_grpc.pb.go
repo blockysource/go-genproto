@@ -34,30 +34,28 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	KeyManagementService_CreateKey_FullMethodName                   = "/blocky.kms.v1alpha.KeyManagementService/CreateKey"
-	KeyManagementService_GetKey_FullMethodName                      = "/blocky.kms.v1alpha.KeyManagementService/GetKey"
-	KeyManagementService_ListKeys_FullMethodName                    = "/blocky.kms.v1alpha.KeyManagementService/ListKeys"
-	KeyManagementService_UpdateKey_FullMethodName                   = "/blocky.kms.v1alpha.KeyManagementService/UpdateKey"
-	KeyManagementService_DeleteKey_FullMethodName                   = "/blocky.kms.v1alpha.KeyManagementService/DeleteKey"
-	KeyManagementService_RotateKey_FullMethodName                   = "/blocky.kms.v1alpha.KeyManagementService/RotateKey"
-	KeyManagementService_GetKeyMaterial_FullMethodName              = "/blocky.kms.v1alpha.KeyManagementService/GetKeyMaterial"
-	KeyManagementService_ListKeyMaterials_FullMethodName            = "/blocky.kms.v1alpha.KeyManagementService/ListKeyMaterials"
-	KeyManagementService_GetKeyMaterialContent_FullMethodName       = "/blocky.kms.v1alpha.KeyManagementService/GetKeyMaterialContent"
-	KeyManagementService_BatchGetKeyMaterialContents_FullMethodName = "/blocky.kms.v1alpha.KeyManagementService/BatchGetKeyMaterialContents"
-	KeyManagementService_SignBlob_FullMethodName                    = "/blocky.kms.v1alpha.KeyManagementService/SignBlob"
-	KeyManagementService_VerifyBlob_FullMethodName                  = "/blocky.kms.v1alpha.KeyManagementService/VerifyBlob"
-	KeyManagementService_SignContent_FullMethodName                 = "/blocky.kms.v1alpha.KeyManagementService/SignContent"
-	KeyManagementService_VerifySignedContent_FullMethodName         = "/blocky.kms.v1alpha.KeyManagementService/VerifySignedContent"
-	KeyManagementService_EncryptContent_FullMethodName              = "/blocky.kms.v1alpha.KeyManagementService/EncryptContent"
-	KeyManagementService_DecryptContent_FullMethodName              = "/blocky.kms.v1alpha.KeyManagementService/DecryptContent"
-	KeyManagementService_EncryptBlob_FullMethodName                 = "/blocky.kms.v1alpha.KeyManagementService/EncryptBlob"
-	KeyManagementService_DecryptBlob_FullMethodName                 = "/blocky.kms.v1alpha.KeyManagementService/DecryptBlob"
-	KeyManagementService_CreateKeyRing_FullMethodName               = "/blocky.kms.v1alpha.KeyManagementService/CreateKeyRing"
-	KeyManagementService_ListKeyRings_FullMethodName                = "/blocky.kms.v1alpha.KeyManagementService/ListKeyRings"
-	KeyManagementService_GetKeyRing_FullMethodName                  = "/blocky.kms.v1alpha.KeyManagementService/GetKeyRing"
-	KeyManagementService_ListKeyRingPublicKeys_FullMethodName       = "/blocky.kms.v1alpha.KeyManagementService/ListKeyRingPublicKeys"
-	KeyManagementService_UpdateKeyRing_FullMethodName               = "/blocky.kms.v1alpha.KeyManagementService/UpdateKeyRing"
-	KeyManagementService_DeleteKeyRing_FullMethodName               = "/blocky.kms.v1alpha.KeyManagementService/DeleteKeyRing"
+	KeyManagementService_CreateKey_FullMethodName             = "/blocky.kms.v1alpha.KeyManagementService/CreateKey"
+	KeyManagementService_GetKey_FullMethodName                = "/blocky.kms.v1alpha.KeyManagementService/GetKey"
+	KeyManagementService_ListKeys_FullMethodName              = "/blocky.kms.v1alpha.KeyManagementService/ListKeys"
+	KeyManagementService_UpdateKey_FullMethodName             = "/blocky.kms.v1alpha.KeyManagementService/UpdateKey"
+	KeyManagementService_DeleteKey_FullMethodName             = "/blocky.kms.v1alpha.KeyManagementService/DeleteKey"
+	KeyManagementService_RotateKey_FullMethodName             = "/blocky.kms.v1alpha.KeyManagementService/RotateKey"
+	KeyManagementService_GetKeyMaterial_FullMethodName        = "/blocky.kms.v1alpha.KeyManagementService/GetKeyMaterial"
+	KeyManagementService_ListKeyMaterials_FullMethodName      = "/blocky.kms.v1alpha.KeyManagementService/ListKeyMaterials"
+	KeyManagementService_SignBlob_FullMethodName              = "/blocky.kms.v1alpha.KeyManagementService/SignBlob"
+	KeyManagementService_VerifyBlob_FullMethodName            = "/blocky.kms.v1alpha.KeyManagementService/VerifyBlob"
+	KeyManagementService_SignContent_FullMethodName           = "/blocky.kms.v1alpha.KeyManagementService/SignContent"
+	KeyManagementService_VerifySignedContent_FullMethodName   = "/blocky.kms.v1alpha.KeyManagementService/VerifySignedContent"
+	KeyManagementService_EncryptContent_FullMethodName        = "/blocky.kms.v1alpha.KeyManagementService/EncryptContent"
+	KeyManagementService_DecryptContent_FullMethodName        = "/blocky.kms.v1alpha.KeyManagementService/DecryptContent"
+	KeyManagementService_EncryptBlob_FullMethodName           = "/blocky.kms.v1alpha.KeyManagementService/EncryptBlob"
+	KeyManagementService_DecryptBlob_FullMethodName           = "/blocky.kms.v1alpha.KeyManagementService/DecryptBlob"
+	KeyManagementService_CreateKeyRing_FullMethodName         = "/blocky.kms.v1alpha.KeyManagementService/CreateKeyRing"
+	KeyManagementService_ListKeyRings_FullMethodName          = "/blocky.kms.v1alpha.KeyManagementService/ListKeyRings"
+	KeyManagementService_GetKeyRing_FullMethodName            = "/blocky.kms.v1alpha.KeyManagementService/GetKeyRing"
+	KeyManagementService_ListKeyRingPublicKeys_FullMethodName = "/blocky.kms.v1alpha.KeyManagementService/ListKeyRingPublicKeys"
+	KeyManagementService_UpdateKeyRing_FullMethodName         = "/blocky.kms.v1alpha.KeyManagementService/UpdateKeyRing"
+	KeyManagementService_DeleteKeyRing_FullMethodName         = "/blocky.kms.v1alpha.KeyManagementService/DeleteKeyRing"
 )
 
 // KeyManagementServiceClient is the client API for KeyManagementService service.
@@ -78,10 +76,6 @@ type KeyManagementServiceClient interface {
 	GetKeyMaterial(ctx context.Context, in *GetKeyMaterialRequest, opts ...grpc.CallOption) (*KeyMaterial, error)
 	// Lists cryptographic keys that matches given query.
 	ListKeyMaterials(ctx context.Context, in *ListKeyMaterialsRequest, opts ...grpc.CallOption) (*ListKeyMaterialsResponse, error)
-	// Gets the private key material content.
-	GetKeyMaterialContent(ctx context.Context, in *GetKeyMaterialContentRequest, opts ...grpc.CallOption) (*KeyMaterialContent, error)
-	// Gets a batch of private key material contents.
-	BatchGetKeyMaterialContents(ctx context.Context, in *BatchGetKeyMaterialContentsRequest, opts ...grpc.CallOption) (*BatchGetKeyMaterialContentsResponse, error)
 	// SignBlob signs the given data with the given key.
 	// The client is responsible for either hard-coding the pair of key and algorithm or
 	// encode specific metadata into the blob to be signed.
@@ -192,24 +186,6 @@ func (c *keyManagementServiceClient) GetKeyMaterial(ctx context.Context, in *Get
 func (c *keyManagementServiceClient) ListKeyMaterials(ctx context.Context, in *ListKeyMaterialsRequest, opts ...grpc.CallOption) (*ListKeyMaterialsResponse, error) {
 	out := new(ListKeyMaterialsResponse)
 	err := c.cc.Invoke(ctx, KeyManagementService_ListKeyMaterials_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyManagementServiceClient) GetKeyMaterialContent(ctx context.Context, in *GetKeyMaterialContentRequest, opts ...grpc.CallOption) (*KeyMaterialContent, error) {
-	out := new(KeyMaterialContent)
-	err := c.cc.Invoke(ctx, KeyManagementService_GetKeyMaterialContent_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyManagementServiceClient) BatchGetKeyMaterialContents(ctx context.Context, in *BatchGetKeyMaterialContentsRequest, opts ...grpc.CallOption) (*BatchGetKeyMaterialContentsResponse, error) {
-	out := new(BatchGetKeyMaterialContentsResponse)
-	err := c.cc.Invoke(ctx, KeyManagementService_BatchGetKeyMaterialContents_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -360,10 +336,6 @@ type KeyManagementServiceServer interface {
 	GetKeyMaterial(context.Context, *GetKeyMaterialRequest) (*KeyMaterial, error)
 	// Lists cryptographic keys that matches given query.
 	ListKeyMaterials(context.Context, *ListKeyMaterialsRequest) (*ListKeyMaterialsResponse, error)
-	// Gets the private key material content.
-	GetKeyMaterialContent(context.Context, *GetKeyMaterialContentRequest) (*KeyMaterialContent, error)
-	// Gets a batch of private key material contents.
-	BatchGetKeyMaterialContents(context.Context, *BatchGetKeyMaterialContentsRequest) (*BatchGetKeyMaterialContentsResponse, error)
 	// SignBlob signs the given data with the given key.
 	// The client is responsible for either hard-coding the pair of key and algorithm or
 	// encode specific metadata into the blob to be signed.
@@ -428,12 +400,6 @@ func (UnimplementedKeyManagementServiceServer) GetKeyMaterial(context.Context, *
 }
 func (UnimplementedKeyManagementServiceServer) ListKeyMaterials(context.Context, *ListKeyMaterialsRequest) (*ListKeyMaterialsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListKeyMaterials not implemented")
-}
-func (UnimplementedKeyManagementServiceServer) GetKeyMaterialContent(context.Context, *GetKeyMaterialContentRequest) (*KeyMaterialContent, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetKeyMaterialContent not implemented")
-}
-func (UnimplementedKeyManagementServiceServer) BatchGetKeyMaterialContents(context.Context, *BatchGetKeyMaterialContentsRequest) (*BatchGetKeyMaterialContentsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BatchGetKeyMaterialContents not implemented")
 }
 func (UnimplementedKeyManagementServiceServer) SignBlob(context.Context, *SignBlobRequest) (*SignBlobResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignBlob not implemented")
@@ -630,42 +596,6 @@ func _KeyManagementService_ListKeyMaterials_Handler(srv interface{}, ctx context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KeyManagementServiceServer).ListKeyMaterials(ctx, req.(*ListKeyMaterialsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KeyManagementService_GetKeyMaterialContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetKeyMaterialContentRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyManagementServiceServer).GetKeyMaterialContent(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyManagementService_GetKeyMaterialContent_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyManagementServiceServer).GetKeyMaterialContent(ctx, req.(*GetKeyMaterialContentRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KeyManagementService_BatchGetKeyMaterialContents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BatchGetKeyMaterialContentsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyManagementServiceServer).BatchGetKeyMaterialContents(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyManagementService_BatchGetKeyMaterialContents_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyManagementServiceServer).BatchGetKeyMaterialContents(ctx, req.(*BatchGetKeyMaterialContentsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -960,14 +890,6 @@ var KeyManagementService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListKeyMaterials",
 			Handler:    _KeyManagementService_ListKeyMaterials_Handler,
-		},
-		{
-			MethodName: "GetKeyMaterialContent",
-			Handler:    _KeyManagementService_GetKeyMaterialContent_Handler,
-		},
-		{
-			MethodName: "BatchGetKeyMaterialContents",
-			Handler:    _KeyManagementService_BatchGetKeyMaterialContents_Handler,
 		},
 		{
 			MethodName: "SignBlob",

@@ -16,9 +16,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: blocky/cloud/kms/v1alpha/cloud_kms_service.proto
+// source: blocky/kms/cloud/v1alpha/cloud_kms_service.proto
 
-package cloudkmspb
+package kmscloudpb
 
 import (
 	context "context"
@@ -34,29 +34,29 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	CloudKeyManagementService_CreateKey_FullMethodName               = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/CreateKey"
-	CloudKeyManagementService_ListKeys_FullMethodName                = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/ListKeys"
-	CloudKeyManagementService_GetKey_FullMethodName                  = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/GetKey"
-	CloudKeyManagementService_UpdateKey_FullMethodName               = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/UpdateKey"
-	CloudKeyManagementService_DeleteKey_FullMethodName               = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/DeleteKey"
-	CloudKeyManagementService_RotateKey_FullMethodName               = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/RotateKey"
-	CloudKeyManagementService_GetKeyMaterial_FullMethodName          = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/GetKeyMaterial"
-	CloudKeyManagementService_ListKeyMaterials_FullMethodName        = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/ListKeyMaterials"
-	CloudKeyManagementService_GetKeyMaterialCryptoKey_FullMethodName = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/GetKeyMaterialCryptoKey"
-	CloudKeyManagementService_CreateKeyRing_FullMethodName           = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/CreateKeyRing"
-	CloudKeyManagementService_ListKeyRings_FullMethodName            = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/ListKeyRings"
-	CloudKeyManagementService_GetKeyRing_FullMethodName              = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/GetKeyRing"
-	CloudKeyManagementService_ListKeyRingPublicKeys_FullMethodName   = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/ListKeyRingPublicKeys"
-	CloudKeyManagementService_UpdateKeyRing_FullMethodName           = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/UpdateKeyRing"
-	CloudKeyManagementService_DeleteKeyRing_FullMethodName           = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/DeleteKeyRing"
-	CloudKeyManagementService_SignBlob_FullMethodName                = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/SignBlob"
-	CloudKeyManagementService_VerifyBlob_FullMethodName              = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/VerifyBlob"
-	CloudKeyManagementService_SignContent_FullMethodName             = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/SignContent"
-	CloudKeyManagementService_VerifySignedContent_FullMethodName     = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/VerifySignedContent"
-	CloudKeyManagementService_EncryptContent_FullMethodName          = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/EncryptContent"
-	CloudKeyManagementService_DecryptContent_FullMethodName          = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/DecryptContent"
-	CloudKeyManagementService_EncryptBlob_FullMethodName             = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/EncryptBlob"
-	CloudKeyManagementService_DecryptBlob_FullMethodName             = "/blocky.cloud.kms.v1alpha.CloudKeyManagementService/DecryptBlob"
+	CloudKeyManagementService_CreateKey_FullMethodName               = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/CreateKey"
+	CloudKeyManagementService_ListKeys_FullMethodName                = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/ListKeys"
+	CloudKeyManagementService_GetKey_FullMethodName                  = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/GetKey"
+	CloudKeyManagementService_UpdateKey_FullMethodName               = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/UpdateKey"
+	CloudKeyManagementService_DeleteKey_FullMethodName               = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/DeleteKey"
+	CloudKeyManagementService_RotateKey_FullMethodName               = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/RotateKey"
+	CloudKeyManagementService_GetKeyMaterial_FullMethodName          = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/GetKeyMaterial"
+	CloudKeyManagementService_ListKeyMaterials_FullMethodName        = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/ListKeyMaterials"
+	CloudKeyManagementService_GetKeyMaterialCryptoKey_FullMethodName = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/GetKeyMaterialCryptoKey"
+	CloudKeyManagementService_CreateKeyRing_FullMethodName           = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/CreateKeyRing"
+	CloudKeyManagementService_ListKeyRings_FullMethodName            = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/ListKeyRings"
+	CloudKeyManagementService_GetKeyRing_FullMethodName              = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/GetKeyRing"
+	CloudKeyManagementService_ListKeyRingPublicKeys_FullMethodName   = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/ListKeyRingPublicKeys"
+	CloudKeyManagementService_UpdateKeyRing_FullMethodName           = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/UpdateKeyRing"
+	CloudKeyManagementService_DeleteKeyRing_FullMethodName           = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/DeleteKeyRing"
+	CloudKeyManagementService_SignBlob_FullMethodName                = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/SignBlob"
+	CloudKeyManagementService_VerifyBlob_FullMethodName              = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/VerifyBlob"
+	CloudKeyManagementService_SignContent_FullMethodName             = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/SignContent"
+	CloudKeyManagementService_VerifySignedContent_FullMethodName     = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/VerifySignedContent"
+	CloudKeyManagementService_EncryptContent_FullMethodName          = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/EncryptContent"
+	CloudKeyManagementService_DecryptContent_FullMethodName          = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/DecryptContent"
+	CloudKeyManagementService_EncryptBlob_FullMethodName             = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/EncryptBlob"
+	CloudKeyManagementService_DecryptBlob_FullMethodName             = "/blocky.kms.cloud.v1alpha.CloudKeyManagementService/DecryptBlob"
 )
 
 // CloudKeyManagementServiceClient is the client API for CloudKeyManagementService service.
@@ -888,7 +888,7 @@ func _CloudKeyManagementService_DecryptBlob_Handler(srv interface{}, ctx context
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CloudKeyManagementService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "blocky.cloud.kms.v1alpha.CloudKeyManagementService",
+	ServiceName: "blocky.kms.cloud.v1alpha.CloudKeyManagementService",
 	HandlerType: (*CloudKeyManagementServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -985,5 +985,5 @@ var CloudKeyManagementService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "blocky/cloud/kms/v1alpha/cloud_kms_service.proto",
+	Metadata: "blocky/kms/cloud/v1alpha/cloud_kms_service.proto",
 }
