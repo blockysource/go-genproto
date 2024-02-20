@@ -34,48 +34,37 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	KeyManagementService_CreateKey_FullMethodName             = "/blocky.kms.v1alpha.KeyManagementService/CreateKey"
-	KeyManagementService_GetKey_FullMethodName                = "/blocky.kms.v1alpha.KeyManagementService/GetKey"
-	KeyManagementService_ListKeys_FullMethodName              = "/blocky.kms.v1alpha.KeyManagementService/ListKeys"
-	KeyManagementService_UpdateKey_FullMethodName             = "/blocky.kms.v1alpha.KeyManagementService/UpdateKey"
-	KeyManagementService_DeleteKey_FullMethodName             = "/blocky.kms.v1alpha.KeyManagementService/DeleteKey"
-	KeyManagementService_RotateKey_FullMethodName             = "/blocky.kms.v1alpha.KeyManagementService/RotateKey"
-	KeyManagementService_GetKeyMaterial_FullMethodName        = "/blocky.kms.v1alpha.KeyManagementService/GetKeyMaterial"
-	KeyManagementService_ListKeyMaterials_FullMethodName      = "/blocky.kms.v1alpha.KeyManagementService/ListKeyMaterials"
-	KeyManagementService_SignBlob_FullMethodName              = "/blocky.kms.v1alpha.KeyManagementService/SignBlob"
-	KeyManagementService_VerifyBlob_FullMethodName            = "/blocky.kms.v1alpha.KeyManagementService/VerifyBlob"
-	KeyManagementService_SignContent_FullMethodName           = "/blocky.kms.v1alpha.KeyManagementService/SignContent"
-	KeyManagementService_VerifySignedContent_FullMethodName   = "/blocky.kms.v1alpha.KeyManagementService/VerifySignedContent"
-	KeyManagementService_EncryptContent_FullMethodName        = "/blocky.kms.v1alpha.KeyManagementService/EncryptContent"
-	KeyManagementService_DecryptContent_FullMethodName        = "/blocky.kms.v1alpha.KeyManagementService/DecryptContent"
-	KeyManagementService_EncryptBlob_FullMethodName           = "/blocky.kms.v1alpha.KeyManagementService/EncryptBlob"
-	KeyManagementService_DecryptBlob_FullMethodName           = "/blocky.kms.v1alpha.KeyManagementService/DecryptBlob"
-	KeyManagementService_CreateKeyRing_FullMethodName         = "/blocky.kms.v1alpha.KeyManagementService/CreateKeyRing"
-	KeyManagementService_ListKeyRings_FullMethodName          = "/blocky.kms.v1alpha.KeyManagementService/ListKeyRings"
-	KeyManagementService_GetKeyRing_FullMethodName            = "/blocky.kms.v1alpha.KeyManagementService/GetKeyRing"
-	KeyManagementService_ListKeyRingPublicKeys_FullMethodName = "/blocky.kms.v1alpha.KeyManagementService/ListKeyRingPublicKeys"
-	KeyManagementService_UpdateKeyRing_FullMethodName         = "/blocky.kms.v1alpha.KeyManagementService/UpdateKeyRing"
-	KeyManagementService_DeleteKeyRing_FullMethodName         = "/blocky.kms.v1alpha.KeyManagementService/DeleteKeyRing"
+	KeyManagementService_GetKey_FullMethodName                  = "/blocky.kms.v1alpha.KeyManagementService/GetKey"
+	KeyManagementService_ListKeys_FullMethodName                = "/blocky.kms.v1alpha.KeyManagementService/ListKeys"
+	KeyManagementService_GetKeyMaterial_FullMethodName          = "/blocky.kms.v1alpha.KeyManagementService/GetKeyMaterial"
+	KeyManagementService_ListKeyMaterials_FullMethodName        = "/blocky.kms.v1alpha.KeyManagementService/ListKeyMaterials"
+	KeyManagementService_BatchGetKeyMaterials_FullMethodName    = "/blocky.kms.v1alpha.KeyManagementService/BatchGetKeyMaterials"
+	KeyManagementService_SignBlob_FullMethodName                = "/blocky.kms.v1alpha.KeyManagementService/SignBlob"
+	KeyManagementService_VerifyBlob_FullMethodName              = "/blocky.kms.v1alpha.KeyManagementService/VerifyBlob"
+	KeyManagementService_SignContent_FullMethodName             = "/blocky.kms.v1alpha.KeyManagementService/SignContent"
+	KeyManagementService_VerifySignedContent_FullMethodName     = "/blocky.kms.v1alpha.KeyManagementService/VerifySignedContent"
+	KeyManagementService_EncryptContent_FullMethodName          = "/blocky.kms.v1alpha.KeyManagementService/EncryptContent"
+	KeyManagementService_DecryptContent_FullMethodName          = "/blocky.kms.v1alpha.KeyManagementService/DecryptContent"
+	KeyManagementService_EncryptBlob_FullMethodName             = "/blocky.kms.v1alpha.KeyManagementService/EncryptBlob"
+	KeyManagementService_DecryptBlob_FullMethodName             = "/blocky.kms.v1alpha.KeyManagementService/DecryptBlob"
+	KeyManagementService_GetKeyRing_FullMethodName              = "/blocky.kms.v1alpha.KeyManagementService/GetKeyRing"
+	KeyManagementService_ListKeyRingKeyMaterials_FullMethodName = "/blocky.kms.v1alpha.KeyManagementService/ListKeyRingKeyMaterials"
 )
 
 // KeyManagementServiceClient is the client API for KeyManagementService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type KeyManagementServiceClient interface {
-	CreateKey(ctx context.Context, in *CreateKeyRequest, opts ...grpc.CallOption) (*Key, error)
+	// Gets a key from the service.
 	GetKey(ctx context.Context, in *GetKeyRequest, opts ...grpc.CallOption) (*Key, error)
 	// Lists Keys.
 	ListKeys(ctx context.Context, in *ListKeysRequest, opts ...grpc.CallOption) (*ListKeysResponse, error)
-	// Updates the metadata and/or key material of a Key.
-	UpdateKey(ctx context.Context, in *UpdateKeyRequest, opts ...grpc.CallOption) (*Key, error)
-	// Deletes a Key.
-	DeleteKey(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*Key, error)
-	// Rotates the key material of a Key.
-	RotateKey(ctx context.Context, in *RotateKeyRequest, opts ...grpc.CallOption) (*Key, error)
 	// Gets the key material of a Key.
 	GetKeyMaterial(ctx context.Context, in *GetKeyMaterialRequest, opts ...grpc.CallOption) (*KeyMaterial, error)
 	// Lists cryptographic keys that matches given query.
 	ListKeyMaterials(ctx context.Context, in *ListKeyMaterialsRequest, opts ...grpc.CallOption) (*ListKeyMaterialsResponse, error)
+	// Gets a batch of key materials by the input identifiers.
+	BatchGetKeyMaterials(ctx context.Context, in *BatchGetKeyMaterialsRequest, opts ...grpc.CallOption) (*BatchGetKeyMaterialsResponse, error)
 	// SignBlob signs the given data with the given key.
 	// The client is responsible for either hard-coding the pair of key and algorithm or
 	// encode specific metadata into the blob to be signed.
@@ -98,18 +87,10 @@ type KeyManagementServiceClient interface {
 	EncryptBlob(ctx context.Context, in *EncryptBlobRequest, opts ...grpc.CallOption) (*EncryptBlobResponse, error)
 	// DecryptBlob decrypts the input blob with the given key.
 	DecryptBlob(ctx context.Context, in *DecryptBlobRequest, opts ...grpc.CallOption) (*DecryptBlobResponse, error)
-	// Create a new key ring.
-	CreateKeyRing(ctx context.Context, in *CreateKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error)
-	// List key rings.
-	ListKeyRings(ctx context.Context, in *ListKeyRingsRequest, opts ...grpc.CallOption) (*ListKeyRingsResponse, error)
 	// Get key ring.
 	GetKeyRing(ctx context.Context, in *GetKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error)
-	// ListKeyRingPublicKeys lists the asymmetric public keys for a given key rings key materials.
-	ListKeyRingPublicKeys(ctx context.Context, in *ListKeyRingPublicKeysRequest, opts ...grpc.CallOption) (*ListKeyRingPublicKeysResponse, error)
-	// Update key ring.
-	UpdateKeyRing(ctx context.Context, in *UpdateKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error)
-	// Delete key ring.
-	DeleteKeyRing(ctx context.Context, in *DeleteKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error)
+	// ListKeyRingKeyMaterials lists the asymmetric public keys for a given key rings key materials.
+	ListKeyRingKeyMaterials(ctx context.Context, in *ListKeyRingKeyMaterialsRequest, opts ...grpc.CallOption) (*ListKeyRingKeyMaterialsResponse, error)
 }
 
 type keyManagementServiceClient struct {
@@ -118,15 +99,6 @@ type keyManagementServiceClient struct {
 
 func NewKeyManagementServiceClient(cc grpc.ClientConnInterface) KeyManagementServiceClient {
 	return &keyManagementServiceClient{cc}
-}
-
-func (c *keyManagementServiceClient) CreateKey(ctx context.Context, in *CreateKeyRequest, opts ...grpc.CallOption) (*Key, error) {
-	out := new(Key)
-	err := c.cc.Invoke(ctx, KeyManagementService_CreateKey_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *keyManagementServiceClient) GetKey(ctx context.Context, in *GetKeyRequest, opts ...grpc.CallOption) (*Key, error) {
@@ -147,33 +119,6 @@ func (c *keyManagementServiceClient) ListKeys(ctx context.Context, in *ListKeysR
 	return out, nil
 }
 
-func (c *keyManagementServiceClient) UpdateKey(ctx context.Context, in *UpdateKeyRequest, opts ...grpc.CallOption) (*Key, error) {
-	out := new(Key)
-	err := c.cc.Invoke(ctx, KeyManagementService_UpdateKey_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyManagementServiceClient) DeleteKey(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*Key, error) {
-	out := new(Key)
-	err := c.cc.Invoke(ctx, KeyManagementService_DeleteKey_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyManagementServiceClient) RotateKey(ctx context.Context, in *RotateKeyRequest, opts ...grpc.CallOption) (*Key, error) {
-	out := new(Key)
-	err := c.cc.Invoke(ctx, KeyManagementService_RotateKey_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *keyManagementServiceClient) GetKeyMaterial(ctx context.Context, in *GetKeyMaterialRequest, opts ...grpc.CallOption) (*KeyMaterial, error) {
 	out := new(KeyMaterial)
 	err := c.cc.Invoke(ctx, KeyManagementService_GetKeyMaterial_FullMethodName, in, out, opts...)
@@ -186,6 +131,15 @@ func (c *keyManagementServiceClient) GetKeyMaterial(ctx context.Context, in *Get
 func (c *keyManagementServiceClient) ListKeyMaterials(ctx context.Context, in *ListKeyMaterialsRequest, opts ...grpc.CallOption) (*ListKeyMaterialsResponse, error) {
 	out := new(ListKeyMaterialsResponse)
 	err := c.cc.Invoke(ctx, KeyManagementService_ListKeyMaterials_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keyManagementServiceClient) BatchGetKeyMaterials(ctx context.Context, in *BatchGetKeyMaterialsRequest, opts ...grpc.CallOption) (*BatchGetKeyMaterialsResponse, error) {
+	out := new(BatchGetKeyMaterialsResponse)
+	err := c.cc.Invoke(ctx, KeyManagementService_BatchGetKeyMaterials_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -264,24 +218,6 @@ func (c *keyManagementServiceClient) DecryptBlob(ctx context.Context, in *Decryp
 	return out, nil
 }
 
-func (c *keyManagementServiceClient) CreateKeyRing(ctx context.Context, in *CreateKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error) {
-	out := new(KeyRing)
-	err := c.cc.Invoke(ctx, KeyManagementService_CreateKeyRing_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyManagementServiceClient) ListKeyRings(ctx context.Context, in *ListKeyRingsRequest, opts ...grpc.CallOption) (*ListKeyRingsResponse, error) {
-	out := new(ListKeyRingsResponse)
-	err := c.cc.Invoke(ctx, KeyManagementService_ListKeyRings_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *keyManagementServiceClient) GetKeyRing(ctx context.Context, in *GetKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error) {
 	out := new(KeyRing)
 	err := c.cc.Invoke(ctx, KeyManagementService_GetKeyRing_FullMethodName, in, out, opts...)
@@ -291,27 +227,9 @@ func (c *keyManagementServiceClient) GetKeyRing(ctx context.Context, in *GetKeyR
 	return out, nil
 }
 
-func (c *keyManagementServiceClient) ListKeyRingPublicKeys(ctx context.Context, in *ListKeyRingPublicKeysRequest, opts ...grpc.CallOption) (*ListKeyRingPublicKeysResponse, error) {
-	out := new(ListKeyRingPublicKeysResponse)
-	err := c.cc.Invoke(ctx, KeyManagementService_ListKeyRingPublicKeys_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyManagementServiceClient) UpdateKeyRing(ctx context.Context, in *UpdateKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error) {
-	out := new(KeyRing)
-	err := c.cc.Invoke(ctx, KeyManagementService_UpdateKeyRing_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyManagementServiceClient) DeleteKeyRing(ctx context.Context, in *DeleteKeyRingRequest, opts ...grpc.CallOption) (*KeyRing, error) {
-	out := new(KeyRing)
-	err := c.cc.Invoke(ctx, KeyManagementService_DeleteKeyRing_FullMethodName, in, out, opts...)
+func (c *keyManagementServiceClient) ListKeyRingKeyMaterials(ctx context.Context, in *ListKeyRingKeyMaterialsRequest, opts ...grpc.CallOption) (*ListKeyRingKeyMaterialsResponse, error) {
+	out := new(ListKeyRingKeyMaterialsResponse)
+	err := c.cc.Invoke(ctx, KeyManagementService_ListKeyRingKeyMaterials_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -322,20 +240,16 @@ func (c *keyManagementServiceClient) DeleteKeyRing(ctx context.Context, in *Dele
 // All implementations must embed UnimplementedKeyManagementServiceServer
 // for forward compatibility
 type KeyManagementServiceServer interface {
-	CreateKey(context.Context, *CreateKeyRequest) (*Key, error)
+	// Gets a key from the service.
 	GetKey(context.Context, *GetKeyRequest) (*Key, error)
 	// Lists Keys.
 	ListKeys(context.Context, *ListKeysRequest) (*ListKeysResponse, error)
-	// Updates the metadata and/or key material of a Key.
-	UpdateKey(context.Context, *UpdateKeyRequest) (*Key, error)
-	// Deletes a Key.
-	DeleteKey(context.Context, *DeleteKeyRequest) (*Key, error)
-	// Rotates the key material of a Key.
-	RotateKey(context.Context, *RotateKeyRequest) (*Key, error)
 	// Gets the key material of a Key.
 	GetKeyMaterial(context.Context, *GetKeyMaterialRequest) (*KeyMaterial, error)
 	// Lists cryptographic keys that matches given query.
 	ListKeyMaterials(context.Context, *ListKeyMaterialsRequest) (*ListKeyMaterialsResponse, error)
+	// Gets a batch of key materials by the input identifiers.
+	BatchGetKeyMaterials(context.Context, *BatchGetKeyMaterialsRequest) (*BatchGetKeyMaterialsResponse, error)
 	// SignBlob signs the given data with the given key.
 	// The client is responsible for either hard-coding the pair of key and algorithm or
 	// encode specific metadata into the blob to be signed.
@@ -358,18 +272,10 @@ type KeyManagementServiceServer interface {
 	EncryptBlob(context.Context, *EncryptBlobRequest) (*EncryptBlobResponse, error)
 	// DecryptBlob decrypts the input blob with the given key.
 	DecryptBlob(context.Context, *DecryptBlobRequest) (*DecryptBlobResponse, error)
-	// Create a new key ring.
-	CreateKeyRing(context.Context, *CreateKeyRingRequest) (*KeyRing, error)
-	// List key rings.
-	ListKeyRings(context.Context, *ListKeyRingsRequest) (*ListKeyRingsResponse, error)
 	// Get key ring.
 	GetKeyRing(context.Context, *GetKeyRingRequest) (*KeyRing, error)
-	// ListKeyRingPublicKeys lists the asymmetric public keys for a given key rings key materials.
-	ListKeyRingPublicKeys(context.Context, *ListKeyRingPublicKeysRequest) (*ListKeyRingPublicKeysResponse, error)
-	// Update key ring.
-	UpdateKeyRing(context.Context, *UpdateKeyRingRequest) (*KeyRing, error)
-	// Delete key ring.
-	DeleteKeyRing(context.Context, *DeleteKeyRingRequest) (*KeyRing, error)
+	// ListKeyRingKeyMaterials lists the asymmetric public keys for a given key rings key materials.
+	ListKeyRingKeyMaterials(context.Context, *ListKeyRingKeyMaterialsRequest) (*ListKeyRingKeyMaterialsResponse, error)
 	mustEmbedUnimplementedKeyManagementServiceServer()
 }
 
@@ -377,29 +283,20 @@ type KeyManagementServiceServer interface {
 type UnimplementedKeyManagementServiceServer struct {
 }
 
-func (UnimplementedKeyManagementServiceServer) CreateKey(context.Context, *CreateKeyRequest) (*Key, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateKey not implemented")
-}
 func (UnimplementedKeyManagementServiceServer) GetKey(context.Context, *GetKeyRequest) (*Key, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetKey not implemented")
 }
 func (UnimplementedKeyManagementServiceServer) ListKeys(context.Context, *ListKeysRequest) (*ListKeysResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListKeys not implemented")
 }
-func (UnimplementedKeyManagementServiceServer) UpdateKey(context.Context, *UpdateKeyRequest) (*Key, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateKey not implemented")
-}
-func (UnimplementedKeyManagementServiceServer) DeleteKey(context.Context, *DeleteKeyRequest) (*Key, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteKey not implemented")
-}
-func (UnimplementedKeyManagementServiceServer) RotateKey(context.Context, *RotateKeyRequest) (*Key, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RotateKey not implemented")
-}
 func (UnimplementedKeyManagementServiceServer) GetKeyMaterial(context.Context, *GetKeyMaterialRequest) (*KeyMaterial, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetKeyMaterial not implemented")
 }
 func (UnimplementedKeyManagementServiceServer) ListKeyMaterials(context.Context, *ListKeyMaterialsRequest) (*ListKeyMaterialsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListKeyMaterials not implemented")
+}
+func (UnimplementedKeyManagementServiceServer) BatchGetKeyMaterials(context.Context, *BatchGetKeyMaterialsRequest) (*BatchGetKeyMaterialsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchGetKeyMaterials not implemented")
 }
 func (UnimplementedKeyManagementServiceServer) SignBlob(context.Context, *SignBlobRequest) (*SignBlobResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignBlob not implemented")
@@ -425,23 +322,11 @@ func (UnimplementedKeyManagementServiceServer) EncryptBlob(context.Context, *Enc
 func (UnimplementedKeyManagementServiceServer) DecryptBlob(context.Context, *DecryptBlobRequest) (*DecryptBlobResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DecryptBlob not implemented")
 }
-func (UnimplementedKeyManagementServiceServer) CreateKeyRing(context.Context, *CreateKeyRingRequest) (*KeyRing, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateKeyRing not implemented")
-}
-func (UnimplementedKeyManagementServiceServer) ListKeyRings(context.Context, *ListKeyRingsRequest) (*ListKeyRingsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListKeyRings not implemented")
-}
 func (UnimplementedKeyManagementServiceServer) GetKeyRing(context.Context, *GetKeyRingRequest) (*KeyRing, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetKeyRing not implemented")
 }
-func (UnimplementedKeyManagementServiceServer) ListKeyRingPublicKeys(context.Context, *ListKeyRingPublicKeysRequest) (*ListKeyRingPublicKeysResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListKeyRingPublicKeys not implemented")
-}
-func (UnimplementedKeyManagementServiceServer) UpdateKeyRing(context.Context, *UpdateKeyRingRequest) (*KeyRing, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateKeyRing not implemented")
-}
-func (UnimplementedKeyManagementServiceServer) DeleteKeyRing(context.Context, *DeleteKeyRingRequest) (*KeyRing, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteKeyRing not implemented")
+func (UnimplementedKeyManagementServiceServer) ListKeyRingKeyMaterials(context.Context, *ListKeyRingKeyMaterialsRequest) (*ListKeyRingKeyMaterialsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListKeyRingKeyMaterials not implemented")
 }
 func (UnimplementedKeyManagementServiceServer) mustEmbedUnimplementedKeyManagementServiceServer() {}
 
@@ -454,24 +339,6 @@ type UnsafeKeyManagementServiceServer interface {
 
 func RegisterKeyManagementServiceServer(s grpc.ServiceRegistrar, srv KeyManagementServiceServer) {
 	s.RegisterService(&KeyManagementService_ServiceDesc, srv)
-}
-
-func _KeyManagementService_CreateKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateKeyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyManagementServiceServer).CreateKey(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyManagementService_CreateKey_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyManagementServiceServer).CreateKey(ctx, req.(*CreateKeyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _KeyManagementService_GetKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -510,60 +377,6 @@ func _KeyManagementService_ListKeys_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KeyManagementService_UpdateKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateKeyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyManagementServiceServer).UpdateKey(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyManagementService_UpdateKey_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyManagementServiceServer).UpdateKey(ctx, req.(*UpdateKeyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KeyManagementService_DeleteKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteKeyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyManagementServiceServer).DeleteKey(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyManagementService_DeleteKey_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyManagementServiceServer).DeleteKey(ctx, req.(*DeleteKeyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KeyManagementService_RotateKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RotateKeyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyManagementServiceServer).RotateKey(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyManagementService_RotateKey_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyManagementServiceServer).RotateKey(ctx, req.(*RotateKeyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _KeyManagementService_GetKeyMaterial_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetKeyMaterialRequest)
 	if err := dec(in); err != nil {
@@ -596,6 +409,24 @@ func _KeyManagementService_ListKeyMaterials_Handler(srv interface{}, ctx context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KeyManagementServiceServer).ListKeyMaterials(ctx, req.(*ListKeyMaterialsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KeyManagementService_BatchGetKeyMaterials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchGetKeyMaterialsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeyManagementServiceServer).BatchGetKeyMaterials(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KeyManagementService_BatchGetKeyMaterials_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeyManagementServiceServer).BatchGetKeyMaterials(ctx, req.(*BatchGetKeyMaterialsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -744,42 +575,6 @@ func _KeyManagementService_DecryptBlob_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KeyManagementService_CreateKeyRing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateKeyRingRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyManagementServiceServer).CreateKeyRing(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyManagementService_CreateKeyRing_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyManagementServiceServer).CreateKeyRing(ctx, req.(*CreateKeyRingRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KeyManagementService_ListKeyRings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListKeyRingsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyManagementServiceServer).ListKeyRings(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyManagementService_ListKeyRings_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyManagementServiceServer).ListKeyRings(ctx, req.(*ListKeyRingsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _KeyManagementService_GetKeyRing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetKeyRingRequest)
 	if err := dec(in); err != nil {
@@ -798,56 +593,20 @@ func _KeyManagementService_GetKeyRing_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KeyManagementService_ListKeyRingPublicKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListKeyRingPublicKeysRequest)
+func _KeyManagementService_ListKeyRingKeyMaterials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListKeyRingKeyMaterialsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(KeyManagementServiceServer).ListKeyRingPublicKeys(ctx, in)
+		return srv.(KeyManagementServiceServer).ListKeyRingKeyMaterials(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: KeyManagementService_ListKeyRingPublicKeys_FullMethodName,
+		FullMethod: KeyManagementService_ListKeyRingKeyMaterials_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyManagementServiceServer).ListKeyRingPublicKeys(ctx, req.(*ListKeyRingPublicKeysRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KeyManagementService_UpdateKeyRing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateKeyRingRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyManagementServiceServer).UpdateKeyRing(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyManagementService_UpdateKeyRing_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyManagementServiceServer).UpdateKeyRing(ctx, req.(*UpdateKeyRingRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _KeyManagementService_DeleteKeyRing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteKeyRingRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyManagementServiceServer).DeleteKeyRing(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyManagementService_DeleteKeyRing_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyManagementServiceServer).DeleteKeyRing(ctx, req.(*DeleteKeyRingRequest))
+		return srv.(KeyManagementServiceServer).ListKeyRingKeyMaterials(ctx, req.(*ListKeyRingKeyMaterialsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -860,10 +619,6 @@ var KeyManagementService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*KeyManagementServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateKey",
-			Handler:    _KeyManagementService_CreateKey_Handler,
-		},
-		{
 			MethodName: "GetKey",
 			Handler:    _KeyManagementService_GetKey_Handler,
 		},
@@ -872,24 +627,16 @@ var KeyManagementService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _KeyManagementService_ListKeys_Handler,
 		},
 		{
-			MethodName: "UpdateKey",
-			Handler:    _KeyManagementService_UpdateKey_Handler,
-		},
-		{
-			MethodName: "DeleteKey",
-			Handler:    _KeyManagementService_DeleteKey_Handler,
-		},
-		{
-			MethodName: "RotateKey",
-			Handler:    _KeyManagementService_RotateKey_Handler,
-		},
-		{
 			MethodName: "GetKeyMaterial",
 			Handler:    _KeyManagementService_GetKeyMaterial_Handler,
 		},
 		{
 			MethodName: "ListKeyMaterials",
 			Handler:    _KeyManagementService_ListKeyMaterials_Handler,
+		},
+		{
+			MethodName: "BatchGetKeyMaterials",
+			Handler:    _KeyManagementService_BatchGetKeyMaterials_Handler,
 		},
 		{
 			MethodName: "SignBlob",
@@ -924,28 +671,12 @@ var KeyManagementService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _KeyManagementService_DecryptBlob_Handler,
 		},
 		{
-			MethodName: "CreateKeyRing",
-			Handler:    _KeyManagementService_CreateKeyRing_Handler,
-		},
-		{
-			MethodName: "ListKeyRings",
-			Handler:    _KeyManagementService_ListKeyRings_Handler,
-		},
-		{
 			MethodName: "GetKeyRing",
 			Handler:    _KeyManagementService_GetKeyRing_Handler,
 		},
 		{
-			MethodName: "ListKeyRingPublicKeys",
-			Handler:    _KeyManagementService_ListKeyRingPublicKeys_Handler,
-		},
-		{
-			MethodName: "UpdateKeyRing",
-			Handler:    _KeyManagementService_UpdateKeyRing_Handler,
-		},
-		{
-			MethodName: "DeleteKeyRing",
-			Handler:    _KeyManagementService_DeleteKeyRing_Handler,
+			MethodName: "ListKeyRingKeyMaterials",
+			Handler:    _KeyManagementService_ListKeyRingKeyMaterials_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
