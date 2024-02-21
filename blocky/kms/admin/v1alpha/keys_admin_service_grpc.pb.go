@@ -66,7 +66,7 @@ type KeysAdminServiceClient interface {
 	// Lists key materials.
 	ListKeyMaterials(ctx context.Context, in *ListKeyMaterialsRequest, opts ...grpc.CallOption) (*ListKeyMaterialsResponse, error)
 	// Deletes a key material
-	DeleteKeyMaterial(ctx context.Context, in *DeleteKeyMaterialRequest, opts ...grpc.CallOption) (*KeyMaterial, error)
+	DeleteKeyMaterial(ctx context.Context, in *DeleteKeyMaterialRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type keysAdminServiceClient struct {
@@ -149,8 +149,8 @@ func (c *keysAdminServiceClient) ListKeyMaterials(ctx context.Context, in *ListK
 	return out, nil
 }
 
-func (c *keysAdminServiceClient) DeleteKeyMaterial(ctx context.Context, in *DeleteKeyMaterialRequest, opts ...grpc.CallOption) (*KeyMaterial, error) {
-	out := new(KeyMaterial)
+func (c *keysAdminServiceClient) DeleteKeyMaterial(ctx context.Context, in *DeleteKeyMaterialRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, KeysAdminService_DeleteKeyMaterial_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -179,7 +179,7 @@ type KeysAdminServiceServer interface {
 	// Lists key materials.
 	ListKeyMaterials(context.Context, *ListKeyMaterialsRequest) (*ListKeyMaterialsResponse, error)
 	// Deletes a key material
-	DeleteKeyMaterial(context.Context, *DeleteKeyMaterialRequest) (*KeyMaterial, error)
+	DeleteKeyMaterial(context.Context, *DeleteKeyMaterialRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedKeysAdminServiceServer()
 }
 
@@ -211,7 +211,7 @@ func (UnimplementedKeysAdminServiceServer) GetKeyMaterial(context.Context, *GetK
 func (UnimplementedKeysAdminServiceServer) ListKeyMaterials(context.Context, *ListKeyMaterialsRequest) (*ListKeyMaterialsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListKeyMaterials not implemented")
 }
-func (UnimplementedKeysAdminServiceServer) DeleteKeyMaterial(context.Context, *DeleteKeyMaterialRequest) (*KeyMaterial, error) {
+func (UnimplementedKeysAdminServiceServer) DeleteKeyMaterial(context.Context, *DeleteKeyMaterialRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteKeyMaterial not implemented")
 }
 func (UnimplementedKeysAdminServiceServer) mustEmbedUnimplementedKeysAdminServiceServer() {}
