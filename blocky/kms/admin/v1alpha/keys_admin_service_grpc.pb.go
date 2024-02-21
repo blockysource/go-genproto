@@ -25,6 +25,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -57,7 +58,7 @@ type KeysAdminServiceClient interface {
 	// Updates the metadata and/or key material of a Key.
 	UpdateKey(ctx context.Context, in *UpdateKeyRequest, opts ...grpc.CallOption) (*Key, error)
 	// Deletes a Key.
-	DeleteKey(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*Key, error)
+	DeleteKey(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Creates a new key material of a Key.
 	CreateKeyMaterial(ctx context.Context, in *CreateKeyMaterialRequest, opts ...grpc.CallOption) (*KeyMaterial, error)
 	// Gets a key material by identifier.
@@ -112,8 +113,8 @@ func (c *keysAdminServiceClient) UpdateKey(ctx context.Context, in *UpdateKeyReq
 	return out, nil
 }
 
-func (c *keysAdminServiceClient) DeleteKey(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*Key, error) {
-	out := new(Key)
+func (c *keysAdminServiceClient) DeleteKey(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, KeysAdminService_DeleteKey_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -170,7 +171,7 @@ type KeysAdminServiceServer interface {
 	// Updates the metadata and/or key material of a Key.
 	UpdateKey(context.Context, *UpdateKeyRequest) (*Key, error)
 	// Deletes a Key.
-	DeleteKey(context.Context, *DeleteKeyRequest) (*Key, error)
+	DeleteKey(context.Context, *DeleteKeyRequest) (*emptypb.Empty, error)
 	// Creates a new key material of a Key.
 	CreateKeyMaterial(context.Context, *CreateKeyMaterialRequest) (*KeyMaterial, error)
 	// Gets a key material by identifier.
@@ -198,7 +199,7 @@ func (UnimplementedKeysAdminServiceServer) ListKeys(context.Context, *ListKeysRe
 func (UnimplementedKeysAdminServiceServer) UpdateKey(context.Context, *UpdateKeyRequest) (*Key, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateKey not implemented")
 }
-func (UnimplementedKeysAdminServiceServer) DeleteKey(context.Context, *DeleteKeyRequest) (*Key, error) {
+func (UnimplementedKeysAdminServiceServer) DeleteKey(context.Context, *DeleteKeyRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteKey not implemented")
 }
 func (UnimplementedKeysAdminServiceServer) CreateKeyMaterial(context.Context, *CreateKeyMaterialRequest) (*KeyMaterial, error) {
